@@ -80,7 +80,7 @@
             thumbs.appendChild(c);
             
 
-            let posterContents = c.toDataURL('image/jpeg', 1.0)
+            let posterContents = c.toDataURL('image/jpeg', 0.0)
             
             var blobBin = atob(posterContents.split(',')[1]);
             var array = [];
@@ -89,6 +89,7 @@
             }
             
             var file = new Blob([new Uint8Array(array)], {type: 'image/jpg'});
+            
             
             var formData = new FormData();
 

@@ -7,7 +7,7 @@ let fs = require('fs')
 
 let upload = (body, files) => {
   let poster = files.poster[0].path
-  
+  console.log(files)
   let buff = Buffer.from(poster);
   console.log(buff)
   
