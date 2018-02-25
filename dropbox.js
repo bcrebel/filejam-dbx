@@ -2,9 +2,11 @@ require('isomorphic-fetch');
 const Dropbox = require('dropbox').Dropbox;
 let pathToApp = '/Apps/filejam/'
 
-let upload = (data) => {
+let upload = (body, files) => {
+  console.log(files)
+  console.log(files.poster)
   let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
-  dbx.filesUpload({content: data.poster, path:`${pathToApp + data.project}/${data.name}.jpg`})
+  dbx.filesUpload({content: files.poster, path:`${pathToApp + body.project}/${body.name}.jpg`})
   .then((metadata) => { console.log(metadata)})
   .catch((error) => {console.log(error)})
 
