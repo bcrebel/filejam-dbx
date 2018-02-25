@@ -180,10 +180,23 @@
          
           var blob = dataURItoBlob(img.src);
           var fd = new FormData(document.forms[0]);
+          console.log(fd)
           
           fd.append("project", projectName);
           fd.append("name", fileName); 
           fd.append("canvasImage", blob);
+          
+          $.ajax({
+            url : "/posters",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data : fd,
+            success: function(data) {
+              console.log(data); // 'OK'
+            },
+          });
+          
           // Convert string into a file
           
             // if (event.type == 'seeked') {

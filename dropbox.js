@@ -6,10 +6,15 @@ let fs = require('fs')
 
 
 let upload = (body, files) => {
-  let poster = files.poster[0].path
+  console.log('files')
   console.log(files)
+  console.log(body)
+  console.log('body')
+  let poster = files.canvasImage[0].path
   let buff = Buffer.from(poster);
-  console.log(buff)
+  console.log('buff')
+    console.log(buff)
+
   
   let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
   dbx.filesUpload({contents: buff, path:`${pathToApp + body.project}/${body.name}.jpg`, mode: 'overwrite'})
