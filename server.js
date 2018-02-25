@@ -22,7 +22,7 @@ app.get("/", function (request, response) {
 // could also use the POST body instead of query string: http://expressjs.com/en/api.html#req.body
 app.post("/posters", function (request, response) {
   // console.log(request.body)
-  upload()
+  upload(request.body)
   response.sendStatus(200);
 });
 
