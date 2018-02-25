@@ -21,10 +21,9 @@ app.get("/", function (request, response) {
 });
 
 // could also use the POST body instead of query string: http://expressjs.com/en/api.html#req.body
-app.post("/posters", load.fields([]), function (request, response) {
+app.post("/posters", load.fields([{ name: 'poster', maxCount: 1 }, { name: 'project' }]), function (request, response) {
   // console.log(request.body)
-  console.log(request.body)
-  // upload(request.body)
+  upload(request.body)
   response.sendStatus(200);
 });
 
