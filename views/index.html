@@ -90,6 +90,10 @@
             var file = new Blob([new Uint8Array(array)], {type: 'image/png'});
             
             var formData = new FormData();
+            console.log('file is')
+            console.log(file)
+            console.log('projectName')
+            console.log(projectName)
             formData.append("poster", file);
             formData.append("project", projectName);
             console.log(formData)
