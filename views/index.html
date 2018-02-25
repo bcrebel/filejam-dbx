@@ -97,6 +97,8 @@
             $.ajax({
               url : "/posters",
               type: "POST",
+              processData: false,
+              contentType: false,
               // dataType:'json',
               data : formData,
               success: function(data) {
