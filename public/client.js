@@ -5,6 +5,5 @@
 // add other scripts at the bottom of index.html
 
 $(function() {
-  
 
 });

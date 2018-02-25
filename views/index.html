@@ -17,7 +17,6 @@
     </header>
 
     <main>
-     <h1>Hi there!</h1>
     <div>
       <div>
        <p id="name">Project Name</p><div id="project"></div> 
@@ -41,6 +40,116 @@
             crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="e4gpfs0pj8z43oz"></script>
     <script src="/client.js"></script>
+    <script>
+      let projectName = '';
+      let videos = []
 
+      projectOptions = {
+
+        // Required. Called when a user selects an item in the Chooser.
+        success: function(files) {
+          document.getElementById("name").innerHTML = `Project Name: ${files[0].name}`
+        },
+        // Optional. Called when the user closes the dialog without selecting a file
+        // and does not include any parameters.
+        cancel: function() {
+
+        },
+        multiselect: false, 
+        folderselect: true, 
+      };
+      
+      videoOptions = {
+
+        // Required. Called when a user selects an item in the Chooser.
+        success: function(files) {
+            files.forEach((file) => {
+              var node = document.createElement("li");                 
+              var textnode = document.createTextNode(`${file.name}`);
+              node.appendChild(textnode);                              
+              document.getElementById("video-list").appendChild(node); 
+              
+              videos = files
+              console.log(videos)
+            });
+          
+          console.log(files[0].link)
+        },
+
+        // Optional. Called when the user closes the dialog without selecting a file
+        // and does not include any parameters.
+        cancel: function() {
+
+        },
+        linkType: "direct",
+        multiselect: true, 
+        extensions: ['.mp4'],
+        folderselect: false, // or true
+      };
+      
+      file = {
+        // Unique ID for the file, compatible with Dropbox API v2.
+        id: "id:...",
+
+        // Name of the file.
+        name: "filename.txt",
+
+        // URL to access the file, which varies depending on the linkType specified when the
+        // Chooser was triggered.
+        link: "https://...",
+
+        // Size of the file in bytes.
+        bytes: 464,
+
+        // URL to a 64x64px icon for the file based on the file's extension.
+        icon: "https://..."
+      };
+      
+      function syncMe() {
+        function createPosters(src) {
+          var i = 0;
+          var video = document.createElement("video");
+          var thumbs = document.getElementById("thumbs");
+          
+          video.crossOrigin = "Anonymous";
+
+          video.addEventListener('loadeddata', function() {
+            thumbs.innerHTML = "";
+            video.currentTime = i;
+          }, false);
+          
+
+
+          video.addEventListener('seeked', function() {
+            // now video has seeked and current frames will show
+            // at the time as we expect
+            generateThumbnail(i);
+          }, false);
+
+          video.preload = "auto";
+          video.src = src;
+
+          function generateThumbnail() {
+            var c = document.createElement("canvas");
+            var ctx = c.getContext("2d");
+            c.width = 450;
+            c.height = 800;
+            ctx.drawImage(video, 0, 0, 450, 800);
+            thumbs.appendChild(c);
+            
+
+            let posterContents = c.toDataURL('image/jpeg', 1.0)
+            console.log(posterContents)
+          }
+        }
+        
+        createPosters(videos[0].link)
+      }
+      
+      var projectButton = Dropbox.createChooseButton(projectOptions);
+      var videoButton = Dropbox.createChooseButton(videoOptions);
+      document.getElementById("project").appendChild(projectButton);
+      document.getElementById("videos").appendChild(videoButton);
+    </script>
   </body>
 </html>
