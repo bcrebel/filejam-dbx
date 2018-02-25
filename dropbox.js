@@ -3,7 +3,7 @@ const Dropbox = require('dropbox').Dropbox;
 let pathToApp = '/Apps/filejam/'
 let fs = require('fs')
 
-fs.readdir(testFolder, (err, files) => {
+fs.readdir('posters', (err, files) => {
   files.forEach(file => {
     console.log(file);
   });
