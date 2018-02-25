@@ -80,15 +80,19 @@
             
 
             let posterContents = c.toDataURL('image/jpeg', 1.0)
-            console.log(posterContents)
-
+            var blobBin = atob(dataURL.split(',')[1]);
+            var array = [];
+            for(var i = 0; i < blobBin.length; i++) {
+                array.push(blobBin.charCodeAt(i));
+            }
+            var file=new Blob([new Uint8Array(array)], {type: 'image/png'});
             $.ajax({
               url : "/posters",
               type: "POST",
               // dataType:'json',
               data : { project: projectName, payload: posterContents },
               success: function(data) {
-                  console.log(data); // 'OK'
+                console.log(data); // 'OK'
               },
             });
           }
