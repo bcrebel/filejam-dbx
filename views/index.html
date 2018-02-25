@@ -48,71 +48,72 @@
       let fileName = '';
       
       function syncMe() {
-        function createPosters(src) {
-          var i = 0;
-          var video = document.createElement("video");
-          var thumbs = document.getElementById("thumbs");
+//         function createPosters(src) {
+//           var i = 0;
+//           var video = document.createElement("video");
+//           var thumbs = document.getElementById("thumbs");
           
-          video.crossOrigin = "Anonymous";
+//           video.crossOrigin = "Anonymous";
 
-          video.addEventListener('loadeddata', function() {
-            thumbs.innerHTML = "";
-            video.currentTime = i;
-          }, false);
+//           video.addEventListener('loadeddata', function() {
+//             thumbs.innerHTML = "";
+//             video.currentTime = i;
+//           }, false);
           
 
 
-          video.addEventListener('seeked', function() {
-            // now video has seeked and current frames will show
-            // at the time as we expect
-            generateThumbnail(i);
-          }, false);
+//           video.addEventListener('seeked', function() {
+//             // now video has seeked and current frames will show
+//             // at the time as we expect
+//             generateThumbnail(i);
+//           }, false);
 
-          video.preload = "auto";
-          video.src = src;
+//           video.preload = "auto";
+//           video.src = src;
 
-          function generateThumbnail() {
-            var c = document.createElement("canvas");
-            var ctx = c.getContext("2d");
-            c.width = 450;
-            c.height = 800;
-            ctx.drawImage(video, 0, 0, 450, 800);
-            thumbs.appendChild(c);
+//           function generateThumbnail() {
+//             var c = document.createElement("canvas");
+//             var ctx = c.getContext("2d");
+//             c.width = 450;
+//             c.height = 800;
+//             ctx.drawImage(video, 0, 0, 450, 800);
+//             thumbs.appendChild(c);
             
 
-            let posterContents = c.toDataURL('image/jpeg', 0.0)
+//             let posterContents = c.toDataURL('image/jpeg', 0.0)
             
-            var blobBin = atob(posterContents.split(',')[1]);
-            var array = [];
-            for(var i = 0; i < blobBin.length; i++) {
-              array.push(blobBin.charCodeAt(i));
-            }
+//             var blobBin = atob(posterContents.split(',')[1]);
+//             var array = [];
+//             for(var i = 0; i < blobBin.length; i++) {
+//               array.push(blobBin.charCodeAt(i));
+//             }
             
-            var file = new Blob([new Uint8Array(array)], {type: 'image/jpg'});
+//             var file = new Blob([new Uint8Array(array)], {type: 'image/jpg'});
             
             
-            var formData = new FormData();
+//             var formData = new FormData();
 
-            formData.append("project", projectName);
-            formData.append("name", fileName);
-            formData.append("poster", file, 'blobby.jpg');
+//             formData.append("project", projectName);
+//             formData.append("name", fileName);
+//             formData.append("poster", file, 'blobby.jpg');
           
             
-            $.ajax({
-              url : "/posters",
-              type: "POST",
-              processData: false,
-              contentType: false,
-              data : formData,
-              success: function(data) {
-                console.log(data); // 'OK'
-              },
-            });
-          }
-        }
+//             $.ajax({
+//               url : "/posters",
+//               type: "POST",
+//               processData: false,
+//               contentType: false,
+//               data : formData,
+//               success: function(data) {
+//                 console.log(data); // 'OK'
+//               },
+//             });
+//           }
+//         }
         
-        fileName = videos[0].name
-        createPosters(videos[0].link)
+//         fileName = videos[0].name
+//         createPosters(videos[0].link)
+        
       }
       
       projectOptions = {
