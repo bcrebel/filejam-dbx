@@ -81,13 +81,13 @@
 
             let posterContents = c.toDataURL('image/jpeg', 1.0)
             console.log(posterContents)
-            let 
+
             $.ajax({
               url : "/posters",
               type: "POST",
               // dataType:'json',
-              data : posterContents,
-              success: function(data){
+              data : {project: projectName/*, payload: posterContents*/},
+              success: function(data) {
                   console.log(data); // 'OK'
               },
             });
@@ -101,7 +101,9 @@
 
         // Required. Called when a user selects an item in the Chooser.
         success: function(files) {
-          document.getElementById("name").innerHTML = `Project Name: ${files[0].name}`
+          projectName = files[0].name;
+          console.log(projectName)
+          document.getElementById("name").innerHTML = `Project Name: ${projectName}`
         },
         // Optional. Called when the user closes the dialog without selecting a file
         // and does not include any parameters.
