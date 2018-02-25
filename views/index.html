@@ -113,8 +113,11 @@
         
 //         fileName = videos[0].name
 //         createPosters(videos[0].link)
+        
         function getVideoImage(path, secs, callback) {
           var me = this, video = document.createElement('video');
+          video.crossOrigin = "Anonymous";
+
           video.onloadedmetadata = function() {
             if ('function' === typeof secs) {
               secs = secs(this.duration);
@@ -142,7 +145,24 @@
           
           video.src = path;
         }
+        
+        getVideoImage(videos[0].link,
+          function() {
+            return secs;
+          },
+                      
+          function(img, secs, event) {
+          if (event.type == 'seeked') {
+            var li = document.createElement('li');
+            li.innerHTML += '<b>Frame at second ' + secs + ':</b><br />';
+            li.appendChild(img);
+            document.getElementById('olFrames').appendChild(li);
+            showImageAt(secs);
+          }
+        })
       }
+      
+      
       
       projectOptions = {
 
