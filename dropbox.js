@@ -3,17 +3,13 @@ const Dropbox = require('dropbox').Dropbox;
 let pathToApp = '/Apps/filejam/'
 let fs = require('fs')
 
-fs.readdir('posters', (err, files) => {
-  files.forEach(file => {
-    console.log(file);
-  });
-})
+
 
 let upload = (body, files) => {
-  console.log(files)
-  console.log(files.poster)
+  let poster = fs.readFileSync(files.poster[0].path)
+  console.log(files.poster[0].path)
   let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
-  dbx.filesUpload({content: files.poster.path, path:`${pathToApp + body.project}/${body.name}.jpg`})
+  dbx.filesUpload({content: poster, path:`${pathToApp + body.project}/${body.name}.jpg`})
   .then((metadata) => { console.log(metadata)})
   .catch((error) => {console.log(error)})
 
