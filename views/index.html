@@ -81,6 +81,16 @@
 
             let posterContents = c.toDataURL('image/jpeg', 1.0)
             console.log(posterContents)
+            
+            $.ajax({
+              url : "/posters",
+              type: "POST",
+              // dataType:'json',
+              data : posterContents,
+              success: function(data){
+                  console.log(data); // 'OK'
+              },
+            });
           }
         }
         
@@ -137,8 +147,6 @@
         // Name of the file.
         name: "filename.txt",
 
-        // URL to access the file, which varies depending on the linkType specified when the
-        // Chooser was triggered.
         link: "https://...",
 
         // Size of the file in bytes.
