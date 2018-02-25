@@ -27,6 +27,8 @@
         <ul id="video-list"></ul>
       </div>
       <button onclick="syncMe()">Sync Me</button>
+      <ol id="frame"></ol>
+
       </div>
       
       <div id="thumbs"></div>
@@ -148,17 +150,17 @@
         
         getVideoImage(videos[0].link,
           function() {
-            return secs;
+            return 0;
           },
                       
           function(img, secs, event) {
-          if (event.type == 'seeked') {
-            var li = document.createElement('li');
-            li.innerHTML += '<b>Frame at second ' + secs + ':</b><br />';
-            li.appendChild(img);
-            document.getElementById('olFrames').appendChild(li);
-            showImageAt(secs);
-          }
+            if (event.type == 'seeked') {
+              var li = document.createElement('li');
+              li.innerHTML += '<b>Frame at second ' + secs + ':</b><br />';
+              li.appendChild(img);
+              document.getElementById('frame').appendChild(li);
+              showImageAt(secs);
+            }
         })
       }
       
