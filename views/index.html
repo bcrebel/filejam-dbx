@@ -28,6 +28,8 @@
       </div>
       <button onclick="syncMe()">Sync Me</button>
       </div>
+      
+      <div id="thumbs"></div>
     </main>
 
     <footer>
@@ -42,8 +44,49 @@
     <script src="/client.js"></script>
     <script>
       let projectName = '';
-      let videos = []
+      let videos = [];
+      
+      function syncMe() {
+        function createPosters(src) {
+          var i = 0;
+          var video = document.createElement("video");
+          var thumbs = document.getElementById("thumbs");
+          
+          video.crossOrigin = "Anonymous";
 
+          video.addEventListener('loadeddata', function() {
+            thumbs.innerHTML = "";
+            video.currentTime = i;
+          }, false);
+          
+
+
+          video.addEventListener('seeked', function() {
+            // now video has seeked and current frames will show
+            // at the time as we expect
+            generateThumbnail(i);
+          }, false);
+
+          video.preload = "auto";
+          video.src = src;
+
+          function generateThumbnail() {
+            var c = document.createElement("canvas");
+            var ctx = c.getContext("2d");
+            c.width = 450;
+            c.height = 800;
+            ctx.drawImage(video, 0, 0, 450, 800);
+            thumbs.appendChild(c);
+            
+
+            let posterContents = c.toDataURL('image/jpeg', 1.0)
+            console.log(posterContents)
+          }
+        }
+        
+        createPosters(videos[0].link)
+      }
+      
       projectOptions = {
 
         // Required. Called when a user selects an item in the Chooser.
@@ -104,48 +147,7 @@
         // URL to a 64x64px icon for the file based on the file's extension.
         icon: "https://..."
       };
-      
-      function syncMe() {
-        function createPosters(src) {
-          var i = 0;
-          var video = document.createElement("video");
-          var thumbs = document.getElementById("thumbs");
-          
-          video.crossOrigin = "Anonymous";
-
-          video.addEventListener('loadeddata', function() {
-            thumbs.innerHTML = "";
-            video.currentTime = i;
-          }, false);
-          
-
-
-          video.addEventListener('seeked', function() {
-            // now video has seeked and current frames will show
-            // at the time as we expect
-            generateThumbnail(i);
-          }, false);
-
-          video.preload = "auto";
-          video.src = src;
-
-          function generateThumbnail() {
-            var c = document.createElement("canvas");
-            var ctx = c.getContext("2d");
-            c.width = 450;
-            c.height = 800;
-            ctx.drawImage(video, 0, 0, 450, 800);
-            thumbs.appendChild(c);
-            
-
-            let posterContents = c.toDataURL('image/jpeg', 1.0)
-            console.log(posterContents)
-          }
-        }
-        
-        createPosters(videos[0].link)
-      }
-      
+    
       var projectButton = Dropbox.createChooseButton(projectOptions);
       var videoButton = Dropbox.createChooseButton(videoOptions);
       document.getElementById("project").appendChild(projectButton);
