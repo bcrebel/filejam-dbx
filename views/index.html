@@ -45,6 +45,7 @@
     <script>
       let projectName = '';
       let videos = [];
+      let fileName = '';
       
       function syncMe() {
         function createPosters(src) {
@@ -84,16 +85,16 @@
             var blobBin = atob(posterContents.split(',')[1]);
             var array = [];
             for(var i = 0; i < blobBin.length; i++) {
-                array.push(blobBin.charCodeAt(i));
+              array.push(blobBin.charCodeAt(i));
             }
             
             var file = new Blob([new Uint8Array(array)], {type: 'image/png'});
             
             var formData = new FormData();
 
-            formData.append("poster", file);
             formData.append("project", projectName);
-            
+            formData.append("name", fileName);
+            formData.append("poster", file);
 
             
             $.ajax({
@@ -110,6 +111,7 @@
           }
         }
         
+        fileName = videos[0].name
         createPosters(videos[0].link)
       }
       
@@ -118,7 +120,6 @@
         // Required. Called when a user selects an item in the Chooser.
         success: function(files) {
           projectName = files[0].name;
-          console.log(projectName)
           document.getElementById("name").innerHTML = `Project Name: ${projectName}`
         },
         // Optional. Called when the user closes the dialog without selecting a file

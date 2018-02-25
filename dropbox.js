@@ -5,7 +5,7 @@ let pathToApp = '/Apps/filejam/'
 let upload = (data) => {
   let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
   console.log(`${pathToApp}/${data.project}/poster1.jpg`)
-  dbx.filesUpload({content: data.poster, path:`${pathToApp + data.project}/poster1.jpg`})
+  dbx.filesUpload({content: data.poster, path:`${pathToApp + data.project}/${name}.jpg`})
   .then((metadata) => { console.log(metadata)})
   .catch((error) => {console.log(error)})
 
