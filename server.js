@@ -5,13 +5,11 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-const index  = require('dropbox')
+let { upload }  = require('./dropbox.js')
 
 app.use(bodyParser.json({limit: '50mb', extended: true})); // for parsing application/json
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true })); // for parsing application/x-www-form-urlencoded
 
-// we've started you off with Express, 
-// but feel free to use whatever libs or frameworks you'd like through `package.json`.
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
@@ -24,7 +22,6 @@ app.get("/", function (request, response) {
 // could also use the POST body instead of query string: http://expressjs.com/en/api.html#req.body
 app.post("/posters", function (request, response) {
   console.log(request.body)
-  index.upload()
   response.sendStatus(200);
 });
 
