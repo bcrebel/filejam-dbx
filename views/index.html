@@ -92,7 +92,7 @@
             var formData = new FormData();
             formData.append("poster", file);
             formData.append("project", projectName);
-
+            console.log(formData)
             
             $.ajax({
               url : "/posters",
@@ -139,10 +139,8 @@
               document.getElementById("video-list").appendChild(node); 
               
               videos = files
-              console.log(videos)
             });
           
-          console.log(files[0].link)
         },
 
         // Optional. Called when the user closes the dialog without selecting a file
