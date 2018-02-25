@@ -11,7 +11,7 @@ let upload = (body, files) => {
   let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
   dbx.filesUpload({content: poster, path:`${pathToApp + body.project}/${body.name}.jpg`})
   .then((metadata) => { console.log(metadata)})
-  .catch((error) => {console.log(error)})
+  .catch((error) => {console.log(error.response[3])})
 
   // return dbx.filesUploadSessionStart({content: poster, path: `${pathToApp + body.project}/${body.name}.jpg`})
   // .then((response) => {
