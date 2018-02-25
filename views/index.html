@@ -135,9 +135,11 @@
             
             var ctx = canvas.getContext('2d');
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
+
+
             var img = new Image();
-            img.src = canvas.toDataURL();
+            img.src = canvas.toDataURL('image/jpeg', 1.0);
+            
             callback.call(me, img, this.currentTime, e);
           };
           
@@ -154,13 +156,17 @@
           },
                       
           function(img, secs, event) {
-            if (event.type == 'seeked') {
-              var li = document.createElement('li');
-              li.innerHTML += '<b>Frame at second ' + secs + ':</b><br />';
-              li.appendChild(img);
-              document.getElementById('frame').appendChild(li);
-              showImageAt(secs);
-            }
+          console.log(img.src)
+          
+          // Convert string into a file
+          
+            // if (event.type == 'seeked') {
+            //   var li = document.createElement('li');
+            //   li.innerHTML += '<b>Frame at second ' + secs + ':</b><br />';
+            //   li.appendChild(img);
+            //   document.getElementById('frame').appendChild(li);
+              // showImageAt(secs);
+            // }
         })
       }
       
