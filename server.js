@@ -10,7 +10,7 @@ let { upload }  = require('./dropbox.js')
 app.use(bodyParser.json({limit: '50mb', extended: true})); // for parsing application/json
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true })); // for parsing application/x-www-form-urlencoded
 let multer = require('multer');
-let load = multer();
+let load = multer({ dest: 'posters/' });
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));

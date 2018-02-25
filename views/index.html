@@ -96,13 +96,16 @@
             formData.append("name", fileName);
             formData.append("poster", file);
 
+            // Display the key/value pairs
+            for (var pair of formData.entries()) {
+                console.log(pair[0]+ ', ' + pair[1]); 
+            }
             
             $.ajax({
               url : "/posters",
               type: "POST",
               processData: false,
               contentType: false,
-              // dataType:'json',
               data : formData,
               success: function(data) {
                 console.log(data); // 'OK'
