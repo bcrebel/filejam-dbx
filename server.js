@@ -4,6 +4,10 @@
 // init project
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
+
+app.use(bodyParser.json({limit: '50mb', extended: true})); // for parsing application/json
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true} })); // for parsing application/x-www-form-urlencoded
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -16,9 +20,6 @@ app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
-app.get("/dreams", function (request, response) {
-  response.send(dreams);
-});
 
 // could also use the POST body instead of query string: http://expressjs.com/en/api.html#req.body
 app.post("/posters", function (request, response) {
@@ -27,12 +28,7 @@ app.post("/posters", function (request, response) {
   response.sendStatus(200);
 });
 
-// Simple in-memory store for now
-var dreams = [
-  "Find and count some sheep",
-  "Climb a really tall mountain",
-  "Wash the dishes"
-];
+
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
