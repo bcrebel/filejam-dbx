@@ -10,21 +10,23 @@ let upload = (body, files) => {
   
   function getBuffer(poster) {
     let decodedImage = null
-    fs.readFileSync(poster, function(err, data) {
-      if (err) throw err;
+    return fs.readFileSync(poster, function(err, data) {
+      console.log('happened at all')
+      if (err) {console.log(err)}
 
       // Encode to base64
       var encodedImage = new Buffer(data, 'binary').toString('base64');
 
       // Decode from base64
       decodedImage = new Buffer(encodedImage, 'base64').toString('binary');
+      console.log('decodedImage')
       console.log(decodedImage)
       return decodedImage
     });
   }
   
   let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
-  dbx.filesUpload({content: getBuffer(poster), path:`${pathToApp + body.project}/${body.name}.jpg`})
+  dbx.filesUpload({content: getBuffer(poster), path:`${pathToApp + body.project}/${body.name}.jpg`, mode: 'overwrite'})
   .then((metadata) => { 
     console.log('metadata')
     console.log(metadata)
