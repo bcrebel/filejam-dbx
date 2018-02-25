@@ -6,12 +6,24 @@ let fs = require('fs')
 
 
 let upload = (body, files) => {
-  let poster = fs.readFileSync(files.poster[0].path)
-  console.log(files.poster[0].path)
+  let poster = files.poster[0].path
+  let decodedImage = null
+  
+  fs.readFileSync(poster, function(err, data) {
+    if (err) throw err;
+
+    // Encode to base64
+    var encodedImage = new Buffer(data, 'binary').toString('base64');
+
+    // Decode from base64
+    decodedImage = new Buffer(encodedImage, 'base64').toString('binary');
+    console.log(decodedImage)
+  });
+  
   let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
-  dbx.filesUpload({content: poster, path:`${pathToApp + body.project}/${body.name}.jpg`})
+  dbx.filesUpload({content: decodedImage, path:`${pathToApp + body.project}/${body.name}.jpg`})
   .then((metadata) => { console.log(metadata)})
-  .catch((error) => {console.log(error.response[3])})
+  .catch((error) => {console.log(error)})
 
   // return dbx.filesUploadSessionStart({content: poster, path: `${pathToApp + body.project}/${body.name}.jpg`})
   // .then((response) => {
