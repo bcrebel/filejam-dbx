@@ -30,7 +30,7 @@ let upload = (body, files) => {
     let poster = files.canvasImage[idx].path;
 
     fs.readFile(poster, (err, data) => {
-      send(data)
+      send(data, idx)
       .then((posterMetadata) => {
         console.log(posterMetadata)
         // Add link to poster to feed
@@ -42,7 +42,8 @@ let upload = (body, files) => {
           let poster = { poster: {} }
           video['video'][body.name[idx]] = body.videoLink[idx]
           poster['poster'][posterMetadata.name] = linkMetadata.url.replace('dl=0', 'dl=1')
-          feed[body.brand][body.project]["slides"].push(video, poster)
+          feed[body.brand][body.project]["slides"].push({})
+          feed[body.brand][body.project]["slides"][idx].push(video, poster)
 
           console.log(util.inspect(feed, { showHidden: true, depth: null }))
         })
@@ -60,6 +61,9 @@ let upload = (body, files) => {
     })  
   }
   function send(data, idx) {
+    console.log('body.name')
+    console.log(body.name)
+    console.log(idx)
     return dbx.filesUpload({contents: data, path:`${pathToApp + body.brand}/${body.project}/${body.name[idx].replace('mp4','jpg')}`, mode: 'overwrite'})
   }
   
