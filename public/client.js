@@ -1,4 +1,3 @@
-$(function() {
       let brands = []
       let brand = '';
       let projectName = '';
@@ -78,6 +77,7 @@ $(function() {
           var blob = dataURItoBlob(img.src);
           var fd = new FormData(document.forms[0]);
           
+          fd.append("brand", brand)
           fd.append("project", projectName);
           fd.append("name", fileName); 
           fd.append("canvasImage", blob);
@@ -161,4 +161,3 @@ $(function() {
       // document.getElementById("project").appendChild(projectButton);
       document.getElementById("videos").appendChild(videoButton);
 
-});

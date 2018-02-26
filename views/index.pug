@@ -9,7 +9,7 @@ html
     link(rel="stylesheet" href="/style.css")
   body
     header
-      h1 
+      h1 It's Feed Time!
     main
       p#brand Brand Name
       select#brands(name="brands")
@@ -21,7 +21,7 @@ html
       p Project Name 
       select(id="project" name="project")
         each project in projects
-          option(value=project)
+          option(value=project) #{project}
       p Select Videos
       div#videos
       ul#video-list

@@ -7,7 +7,6 @@ let fs = require('fs')
 let populate = () => {
   let fakeProjects = [ "Wonder Woman\'s Gal Gadot", "Instagram Illusions" ]
   return fakeProjects
-  // fakeProjects.forEach()
 }
 
 let upload = (body, files) => {
@@ -24,7 +23,7 @@ let upload = (body, files) => {
   
   function send(data) {
     let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
-    return dbx.filesUpload({contents: data, path:`${pathToApp + body.project}/${body.name.replace('mp4','jpg')}`, mode: 'overwrite'}) 
+    return dbx.filesUpload({contents: data, path:`pathToApp${body.brand}/${body.project}/${body.name.replace('mp4','jpg')}`, mode: 'overwrite'}) 
   }
 }
 
