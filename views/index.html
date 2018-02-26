@@ -26,7 +26,7 @@
         </select>
         <br><br>
       
-        <p id="name">Project Name</p>
+        <p>Project Name</p>
         <select id="project" name= "project">
           
         </select>
@@ -95,10 +95,9 @@
         
         // Declare values from selects here
         brand = $( "#brand" ).val();
-        projectName = $( "project"
+        projectName = $( "#project" ).val();
         fileName = videos[0].name
-        
-        
+      
 
         getVideoImage(videos[0].link,
           function() {

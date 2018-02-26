@@ -4,6 +4,11 @@ let pathToApp = '/Apps/filejam/'
 let fs = require('fs')
 
 
+let populate = () => {
+  let fakeProjects = [ "Wonder Woman\'s Gal Gadot", "Instagram Illusions" ]
+  
+  fakeProjects.forEach()
+}
 
 let upload = (body, files) => {
   let poster = files.canvasImage[0].path
