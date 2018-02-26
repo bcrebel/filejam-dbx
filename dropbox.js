@@ -29,18 +29,19 @@ let upload = (body, files) => {
   fs.readFile(poster, (err, data) => {
     send(data)
     .then((posterMetadata) => {
-      console.log(metadata)
+      console.log(posterMetadata)
       // Add link to poster to feed
 
-      createLink(metadata.path_lower)
+      createLink(posterMetadata.path_lower)
       .then((linkMetadata) => {
-        console.log(metadata.url)
-        let video = {}
-        let poster = {}
-        video[body.name] = body.videoLink
-        poster[mea] = 
-        feed[body.brand][body.project]["slides"].push(video)
-
+        console.log(linkMetadata.url)
+        let video = { video: {} }
+        let poster = { poster: {} }
+        video['video'][body.name] = body.videoLink
+        poster['poster'][posterMetadata.name] = linkMetadata.url
+        feed[body.brand][body.project]["slides"].push(video, poster)
+        
+        console.log(util.inspect(feed, { showHidden: true, depth: null }))
       })
       .catch((error) => {
         console.log(error)
