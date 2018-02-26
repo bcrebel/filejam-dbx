@@ -26,7 +26,6 @@
             var ctx = canvas.getContext('2d');
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-
             var img = new Image();
             img.src = canvas.toDataURL('image/jpeg', 1.0);
             

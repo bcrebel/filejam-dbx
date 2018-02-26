@@ -13,6 +13,7 @@ let populate = () => {
 
 let upload = (body, files) => {
   let poster = files.canvasImage[0].path
+  
   fs.readFile(poster, (err, data) => {
     send(data)
     .then((metadata) => {
