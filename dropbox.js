@@ -2,6 +2,11 @@ require('isomorphic-fetch');
 const Dropbox = require('dropbox').Dropbox;
 let pathToApp = '/Apps/filejam/'
 let fs = require('fs')
+const FileSync = require('lowdb/adapters/FileSync')
+const low = require('lowdb')
+const adapter = new FileSync('db.json')
+const db = low(adapter)
+
 let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
 let targetFiles = []
 
@@ -18,7 +23,8 @@ let upload = (body, files) => {
     send(data)
     .then((metadata) => {
       console.log(metadata)
-      
+      // Add link to poster to feed
+      // Add link to video to feed
       // Delete local file
       fs.unlinkSync(poster)
     })
