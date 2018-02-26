@@ -1,3 +1,5 @@
+const util = require('util')
+
 require('isomorphic-fetch');
 const Dropbox = require('dropbox').Dropbox;
 let pathToApp = '/Apps/filejam/'
@@ -22,14 +24,17 @@ let populate = () => {
 }
 
 let upload = (body, files) => {
-  let poster = files.canvasImage[0].path
-  
+  let poster = files.canvasImage[0].path;
+  console.log(vidFileName)
   let feed = {}
   feed[body.brand] = {}
   feed[body.brand][body.project] = {"slides": []}
-  feed[body.brand][body.project]["slides"].push({ "video" : {body.name: body.videoLink}})
+  
+  let video = {}
+  video[
+  feed[body.brand][body.project]["slides"].push({ "video" : { : vidFileUrl}})
 
-  console.log(feed)
+  console.log(util.inspect(feed, { showHidden: true, depth: null }))
   
   fs.readFile(poster, (err, data) => {
     send(data)
