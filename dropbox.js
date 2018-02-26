@@ -12,12 +12,14 @@ let upload = (body, files) => {
   console.log('body')
   let poster = files.canvasImage[0].path
   let buff = Buffer.from(poster);
-  console.log('buff')
-    console.log(buff)
+  let json = JSON.stringify(buff);
+    console.log('json');
+
+  console.log(json);
 
   
   let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
-  dbx.filesUpload({contents: buff, path:`${pathToApp + body.project}/${body.name}.jpg`, mode: 'overwrite'})
+  dbx.filesUpload({contents: buff, path:`${pathToApp + body.project}/${body.name.replace('mp4','jpg')}`, mode: 'overwrite'})
   .then((metadata) => { 
     console.log('metadata')
     console.log(metadata)
