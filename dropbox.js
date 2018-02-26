@@ -10,10 +10,11 @@ let populate = () => {
   
   function isFolder(file) {
     let dateRegex = /[a-zA-Z]{3,9}\s+\d{1,2}/g
+    let posterRegex = /poster/ig
     // console.log(file)
     if( file['.tag'] != 'folder' ) {
       return false
-    } else if(dateRegex.test(file.name)) {
+    } else if(dateRegex.test(file.name) | posterRegex.test(file.name)) {
       return false
     } else {
       return true
@@ -30,7 +31,7 @@ let populate = () => {
       function pushFiles(entries) {
         entries.forEach((file) => {
           if(condition(file)) {
-            console.log(file)
+            console.log(file.name)
             targetFiles.push(file.name)
           }
         })
