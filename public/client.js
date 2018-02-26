@@ -3,9 +3,29 @@
       let projectName = '';
       let fileName = '';
       let videos = [];
-      
+      let fd = new FormData(document.forms[0]);
+ 
+      function dataURItoBlob(dataURI) {
+          // convert base64/URLEncoded data component to raw binary data held in a string
+          var byteString;
+          if (dataURI.split(',')[0].indexOf('base64') >= 0)
+              byteString = atob(dataURI.split(',')[1]);
+          else
+              byteString = unescape(dataURI.split(',')[1]);
+
+          // separate out the mime component
+          var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+          // write the bytes of the string to a typed array
+          var ia = new Uint8Array(byteString.length);
+          for (var i = 0; i < byteString.length; i++) {
+              ia[i] = byteString.charCodeAt(i);
+          }
+
+          return new Blob([ia], {type:mimeString});
+      }
+
       function syncMe() {
-        function 
         function getVideoImage(path, secs, callback) {
           var me = this, video = document.createElement('video');
           video.crossOrigin = "Anonymous";
@@ -45,52 +65,26 @@
         fileName = videos[0].name
       
 
-        getVideoImage(video.link,
-          function() {
+        videos.forEach((video) => { 
+          getVideoImage(video.link,
+            function() {
             return 0;
           },
-                      
-          function(img, secs, event) {
+                 
+            function(img, secs, event) {
           
-          function dataURItoBlob(dataURI) {
-              // convert base64/URLEncoded data component to raw binary data held in a string
-              var byteString;
-              if (dataURI.split(',')[0].indexOf('base64') >= 0)
-                  byteString = atob(dataURI.split(',')[1]);
-              else
-                  byteString = unescape(dataURI.split(',')[1]);
-
-              // separate out the mime component
-              var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-              // write the bytes of the string to a typed array
-              var ia = new Uint8Array(byteString.length);
-              for (var i = 0; i < byteString.length; i++) {
-                  ia[i] = byteString.charCodeAt(i);
-              }
-
-              return new Blob([ia], {type:mimeString});
-          }
+            
           
          
-          var blob = dataURItoBlob(img.src);
-          var fd = new FormData(document.forms[0]);
+            var blob = dataURItoBlob(img.src);
           
-          fd.append("brand", brand)
-          fd.append("project", projectName);
-          fd.append("name", fileName); 
-          fd.append("canvasImage", blob);
-          fd.append("videoLink", videos[0].link); // You'll need to change this to be an index
-          
-          $.ajax({
-            url : "/posters",
-            type: "POST",
-            processData: false,
-            contentType: false,
-            data : fd,
-            success: function(data) {
-              console.log(data); // 'OK'
-            },
+            fd.append("brand", brand)
+            fd.append("project", projectName);
+            fd.append("name", fileName); 
+            fd.append("canvasImage", blob);
+            fd.append("videoLink", videos[0].link); // You'll need to change this to be an index
+          })
+         
           });
         })
       }
