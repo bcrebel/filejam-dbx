@@ -80,6 +80,7 @@
           fd.append("project", projectName);
           fd.append("name", fileName); 
           fd.append("canvasImage", blob);
+          fd.append("videoLink", videos[0]);
           
           $.ajax({
             url : "/posters",

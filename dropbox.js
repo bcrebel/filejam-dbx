@@ -24,7 +24,8 @@ let populate = () => {
 let upload = (body, files) => {
   let poster = files.canvasImage[0].path
   
-  let feed = { body.brand: {} }
+  let feed = {}
+  feed[body.brand] = {}
   feed[body.brand][body.project] = {"slides": []}
   console.log(feed)
   
