@@ -23,7 +23,8 @@ let upload = (body, files) => {
   
   function send(data) {
     let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
-    return dbx.filesUpload({contents: data, path:`pathToApp${body.brand}/${body.project}/${body.name.replace('mp4','jpg')}`, mode: 'overwrite'}) 
+    console.log(`${pathToApp + body.brand}/${body.project}/${body.name.replace('mp4','jpg')}`)
+    return dbx.filesUpload({contents: data, path:`${pathToApp + body.brand}/${body.project}/${body.name.replace('mp4','jpg')}`, mode: 'overwrite'}) 
   }
 }
 
