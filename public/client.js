@@ -42,7 +42,7 @@
         
         // Declare values from selects here
         brand = $( "#brand" ).val();
-        projectName = $( "#project" ).val();
+        projectName = $( "#projects" ).val();
         fileName = videos[0].name
       
 
@@ -94,24 +94,7 @@
           });
         })
       }
-      
-      
-      
-//       projectOptions = {
-
-//         // Required. Called when a user selects an item in the Chooser.
-//         success: function(files) {
-//           projectName = files[0].name;
-//           document.getElementById("name").innerHTML = `Project Name: ${projectName}`
-//         },
-//         // Optional. Called when the user closes the dialog without selecting a file
-//         // and does not include any parameters.
-//         cancel: function() {
-
-//         },
-//         multiselect: false, 
-//         folderselect: true, 
-//       };
+    
       
       videoOptions = {
 
@@ -156,8 +139,6 @@
         icon: "https://..."
       };
       console.log(brands)
-      // var projectButton = Dropbox.createChooseButton(projectOptions);
       var videoButton = Dropbox.createChooseButton(videoOptions);
-      // document.getElementById("project").appendChild(projectButton);
       document.getElementById("videos").appendChild(videoButton);
 
