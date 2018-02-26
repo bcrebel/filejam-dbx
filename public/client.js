@@ -37,6 +37,7 @@
             video.crossOrigin = 'Anonymous'; // Bump tainted canvases
             
             video.onloadedmetadata = function() {
+              console.log('meta')
               if ('function' === typeof secs) {
                 secs = secs(this.duration);
               }
