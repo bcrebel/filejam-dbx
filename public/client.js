@@ -64,6 +64,7 @@
         let fd = new FormData(document.forms[0]);
 
         function sendForm() {
+          console.log('shoulda sent')
           return $.ajax({
             url : "/posters",
             type: "POST",
@@ -78,7 +79,7 @@
           })
         }
         
-        videos.forEach((video) => { 
+        videos.forEach((video, idx) => { 
           fileName = video.name
 
           getVideoImage(video.link,
@@ -96,13 +97,15 @@
               console.log(video.name)
               fd.append("canvasImage", blob);
               fd.append("videoLink", video.link); // You'll need to change this to be an index
+              console.log('idx')
+            console.log(idx)
+                        console.log('videos.length')
+
+            console.log(videos.length)
+              if(idx == videos.length - 1) { return sendForm() }
             }           
           )          
         })
-        
-        setTimeout(sendForm(), 10000);
-
-        
       }
     
       
