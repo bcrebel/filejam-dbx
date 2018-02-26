@@ -7,12 +7,6 @@ let fs = require('fs')
 const FileSync = require('lowdb/adapters/FileSync')
 let brands = ["Cosmopolitan", "Elle", "Esquire", "Harpers Bazaar"]
 
-// let  feed = brands.reduce((acc, curr) => {
-//           acc[curr] = {}
-//           return acc
-//         }, {})
-//   console.log(feed)
-
 let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
 let targetFiles = []
 
@@ -29,17 +23,29 @@ let upload = (body, files) => {
   feed[body.brand] = {}
   feed[body.brand][body.project] = {"slides": []}
   
-  let video = {}
-  video[`${body.name}`] = body.videoLink
-  feed[body.brand][body.project]["slides"].push(video)
-
+  
   console.log(util.inspect(feed, { showHidden: true, depth: null }))
   
   fs.readFile(poster, (err, data) => {
     send(data)
-    .then((metadata) => {
-      // console.log(metadata)
+    .then((posterMetadata) => {
+      console.log(metadata)
       // Add link to poster to feed
+
+      createLink(metadata.path_lower)
+      .then((linkMetadata) => {
+        console.log(metadata.url)
+        let video = {}
+        let poster = {}
+        video[body.name] = body.videoLink
+        poster[mea] = 
+        feed[body.brand][body.project]["slides"].push(video)
+
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+      
       // Add link to video to feed
       // Delete local file
       fs.unlinkSync(poster)
@@ -51,6 +57,10 @@ let upload = (body, files) => {
   
   function send(data) {
     return dbx.filesUpload({contents: data, path:`${pathToApp + body.brand}/${body.project}/${body.name.replace('mp4','jpg')}`, mode: 'overwrite'})
+  }
+  
+  function createLink(path) {
+    return dbx.sharingCreateSharedLink({path: path})
   }
 }
 
