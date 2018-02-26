@@ -3,7 +3,6 @@
       let projectName = '';
       let fileName = '';
       let videos = [];
-      let fd = new FormData(document.forms[0]);
  
       function dataURItoBlob(dataURI) {
           // convert base64/URLEncoded data component to raw binary data held in a string
@@ -62,12 +61,12 @@
         // Declare values from selects here
         brand = $( "#brand" ).val();
         projectName = $( "#projects" ).val();
-      
+        let fd = new FormData(document.forms[0]);
+
 
         videos.forEach((video) => { 
           fileName = video.name
-          console.log('fileName')
-          console.log(fileName)
+
 
           getVideoImage(video.link,
             function() {
@@ -79,7 +78,9 @@
 
               fd.set("brand", brand)
               fd.set("project", projectName);
-              fd.append("name", fileName); 
+              fd.append("name", video.name); 
+              console.log('video.name')
+              console.log(video.name)
               fd.append("canvasImage", blob);
               fd.append("videoLink", video.link); // You'll need to change this to be an index
             }           
@@ -89,6 +90,8 @@
         $.ajax({
           url : "/posters",
           type: "POST",
+          cache: false,
+          async: false,
           processData: false,
           contentType: false,
           data: fd,
