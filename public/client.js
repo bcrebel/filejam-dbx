@@ -62,10 +62,11 @@
         // Declare values from selects here
         brand = $( "#brand" ).val();
         projectName = $( "#projects" ).val();
-        fileName = videos[0].name
       
 
         videos.forEach((video) => { 
+          fileName = video.name
+
           getVideoImage(video.link,
             function() {
               return 0;
@@ -74,15 +75,15 @@
             function(img, secs, event) {
               var blob = dataURItoBlob(img.src);
 
-              fd.append("brand", brand)
-              fd.append("project", projectName);
+              fd.set("brand", brand)
+              fd.set("project", projectName);
               fd.append("name", fileName); 
               fd.append("canvasImage", blob);
-              fd.append("videoLink", videos[0].link); // You'll need to change this to be an index
-            }
-                        
+              fd.append("videoLink", video.link); // You'll need to change this to be an index
+            }           
           )          
         })
+        
         $.ajax({
           url : "/posters",
           type: "POST",
