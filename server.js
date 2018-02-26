@@ -21,7 +21,7 @@ app.use(express.static('public'));
 app.get("/", function (request, response) {
   // response.sendFile(__dirname + '/views/index.html');
   let projects = populate()
-  // response.render('index', { projects: projects })
+  response.render('index', { projects: projects })
 
 });
 
