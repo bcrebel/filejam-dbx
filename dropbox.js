@@ -43,7 +43,11 @@ let upload = (body, files) => {
           video['video'][body.name[idx]] = body.videoLink[idx]
           poster['poster'][posterMetadata.name] = linkMetadata.url.replace('dl=0', 'dl=1')
           feed[body.brand][body.project]["slides"].push({})
-          feed[body.brand][body.project]["slides"][idx].push(video, poster)
+          let slide = Object.assign({}, video, poster)
+          console.log('slide')
+                    console.log(slide)
+
+          feed[body.brand][body.project]["slides"][idx] = slide;
 
           console.log(util.inspect(feed, { showHidden: true, depth: null }))
         })
