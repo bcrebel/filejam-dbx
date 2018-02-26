@@ -25,21 +25,20 @@ let populate = () => {
 
 let upload = (body, files) => {
   let poster = files.canvasImage[0].path;
-  console.log(vidFileName)
   let feed = {}
   feed[body.brand] = {}
   feed[body.brand][body.project] = {"slides": []}
   
   let video = {}
-  video[
-  feed[body.brand][body.project]["slides"].push({ "video" : { : vidFileUrl}})
+  video[`${body.name}`] = body.videoLink
+  feed[body.brand][body.project]["slides"].push(video)
 
   console.log(util.inspect(feed, { showHidden: true, depth: null }))
   
   fs.readFile(poster, (err, data) => {
     send(data)
     .then((metadata) => {
-      console.log(metadata)
+      // console.log(metadata)
       // Add link to poster to feed
       // Add link to video to feed
       // Delete local file
