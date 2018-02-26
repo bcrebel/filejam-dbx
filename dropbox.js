@@ -9,8 +9,11 @@ let populate = () => {
   let fakeProjects = [ "Wonder Woman\'s Gal Gadot", "Instagram Illusions" ]
   
   function isFolder(file) {
+    let dateRegex = /[a-zA-Z]{3,9}\s+\d{1,2}/g
     // console.log(file)
     if( file['.tag'] != 'folder' ) {
+      return false
+    } else if(dateRegex.test(file.name)) {
       return false
     } else {
       return true
