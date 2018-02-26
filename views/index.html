@@ -19,14 +19,23 @@
     <main>
     <div>
       <div>
-       <p id="name">Project Name</p><div id="project"></div> 
-      </div>
-      <div>
-        <p>Select Videos</p>
-        <div id="videos"></div>
-        <ul id="video-list"></ul>
-      </div>
-      <button onclick="syncMe()">Sync Me</button>
+        <p id="brand">Brand Name</p>
+        <form action="/brands">
+          <select name="brands">
+          <option value="COSMOPOLITAN">Cosmopolitan</option>
+          <option value="ELLE">Elle</option>
+          <option value="ESQUIRE">Esquire</option>
+          <option value="HARPERSBAZAAR">Harper's Bazaar</option>
+        </select>
+        <br><br>
+         <p id="name">Project Name</p>
+         <div id="project"></div> 
+          <p>Select Videos</p>
+          <div id="videos"></div>
+          <ul id="video-list"></ul>
+        <button onclick="syncMe()">Sync Me</button>
+      </form>
+
       <ol id="frame"></ol>
 
       </div>
@@ -45,9 +54,10 @@
     <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="e4gpfs0pj8z43oz"></script>
     <script src="/client.js"></script>
     <script>
+      let brand = '';
       let projectName = '';
-      let videos = [];
       let fileName = '';
+      let videos = [];
       
       function syncMe() {
         
