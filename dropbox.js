@@ -23,36 +23,38 @@ let upload = (body, files) => {
   
   console.log(util.inspect(feed, { showHidden: true, depth: null }))
   
-  fs.readFile(poster, (err, data) => {
-    send(data)
-    .then((posterMetadata) => {
-      console.log(posterMetadata)
-      // Add link to poster to feed
+  files.canvasImage.forEach((image, idx) => {})
+  function doit() {
+    fs.readFile(poster, (err, data) => {
+      send(data)
+      .then((posterMetadata) => {
+        console.log(posterMetadata)
+        // Add link to poster to feed
 
-      createLink(posterMetadata.path_lower)
-      .then((linkMetadata) => {
-        console.log(linkMetadata.url)
-        let video = { video: {} }
-        let poster = { poster: {} }
-        video['video'][body.name] = body.videoLink
-        poster['poster'][posterMetadata.name] = linkMetadata.url.replace('dl=0', 'dl=1')
-        feed[body.brand][body.project]["slides"].push(video, poster)
-        
-        console.log(util.inspect(feed, { showHidden: true, depth: null }))
+        createLink(posterMetadata.path_lower)
+        .then((linkMetadata) => {
+          console.log(linkMetadata.url)
+          let video = { video: {} }
+          let poster = { poster: {} }
+          video['video'][body.name] = body.videoLink
+          poster['poster'][posterMetadata.name] = linkMetadata.url.replace('dl=0', 'dl=1')
+          feed[body.brand][body.project]["slides"].push(video, poster)
+
+          console.log(util.inspect(feed, { showHidden: true, depth: null }))
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+
+        // Add link to video to feed
+        // Delete local file
+        fs.unlinkSync(poster)
       })
       .catch((error) => {
         console.log(error)
       })
-      
-      // Add link to video to feed
-      // Delete local file
-      fs.unlinkSync(poster)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-  })
-  
+    })  
+  }
   function send(data) {
     return dbx.filesUpload({contents: data, path:`${pathToApp + body.brand}/${body.project}/${body.name.replace('mp4','jpg')}`, mode: 'overwrite'})
   }
