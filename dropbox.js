@@ -13,6 +13,13 @@ let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
 let targetFiles = []
 
 let populate = () => {
+  
+  db.get("Cosmopolitan")
+  .set( "Wonder Woman's Gal Gadot", "{}")
+  .write()
+  
+  console.log('pop')
+  
   let fakeProjects = [ "Wonder Woman\'s Gal Gadot", "Instagram Illusions" ]
   
   return fakeProjects
