@@ -68,25 +68,31 @@
         videos.forEach((video) => { 
           getVideoImage(video.link,
             function() {
-            return 0;
-          },
+              return 0;
+            },
                  
             function(img, secs, event) {
-          
-            
-          
-         
-            var blob = dataURItoBlob(img.src);
-          
-            fd.append("brand", brand)
-            fd.append("project", projectName);
-            fd.append("name", fileName); 
-            fd.append("canvasImage", blob);
-            fd.append("videoLink", videos[0].link); // You'll need to change this to be an index
-          })
-         
-          });
+              var blob = dataURItoBlob(img.src);
+
+              fd.append("brand", brand)
+              fd.append("project", projectName);
+              fd.append("name", fileName); 
+              fd.append("canvasImage", blob);
+              fd.append("videoLink", videos[0].link); // You'll need to change this to be an index
+            }
+                        
+          )          
         })
+        $.ajax({
+          url : "/posters",
+          type: "POST",
+          processData: false,
+          contentType: false,
+          data : fd,
+          success: function(data) {
+            console.log(data); // 'OK'
+          }
+        });
       }
     
       
