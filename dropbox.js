@@ -8,6 +8,11 @@ let targetFiles = []
 let populate = () => {
   let fakeProjects = [ "Wonder Woman\'s Gal Gadot", "Instagram Illusions" ]
   
+  function isFolder(file) {
+    console.log(file)
+    return file['.tag'] == 'folder' ? true : false
+  }
+  
   let getFiles = (path, condition) => {
     return new Promise((resolve, reject) => {
       
@@ -50,7 +55,12 @@ let populate = () => {
         })
       }
     })
-  }  
+  } 
+  
+  getFiles('/STAMP/COSMO/Projects', isFolder)
+  .then((files) => {
+    console.log(files)
+  })
 }
 
 let upload = (body, files) => {
