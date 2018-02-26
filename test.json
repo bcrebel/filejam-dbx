@@ -4,8 +4,12 @@
       "cover_card": "example.com",
       "slides": [
         {
-          "video.mp4": "example.com",
-          "poster.mp4": "example.com"
+          "video": {
+            "video.mp4": "example.com"
+          },
+          "poster": {
+            "poster.mp4": "example.com"
+          }
         },
         {
           "video2.mp4": "example.com",
