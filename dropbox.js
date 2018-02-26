@@ -27,6 +27,7 @@ let populate = () => {
       function pushFiles(entries) {
         entries.forEach((file) => {
           if(condition(file)) {
+            console.log(file)
             targetFiles.push(file.name)
           }
         })
@@ -61,7 +62,7 @@ let populate = () => {
     })
   } 
   
-  getFiles('/STAMP/Esquire/Projects', isFolder)
+  getFiles('/STAMP/ELLE/Projects', isFolder)
   .then((files) => {
     console.log(files)
   })
