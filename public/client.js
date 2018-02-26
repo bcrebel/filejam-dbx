@@ -66,6 +66,8 @@
 
         videos.forEach((video) => { 
           fileName = video.name
+          console.log('fileName')
+          console.log(fileName)
 
           getVideoImage(video.link,
             function() {
@@ -89,7 +91,7 @@
           type: "POST",
           processData: false,
           contentType: false,
-          data : fd,
+          data: fd,
           success: function(data) {
             console.log(data); // 'OK'
           }
