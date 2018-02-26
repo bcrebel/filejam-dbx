@@ -4,31 +4,32 @@ let pathToApp = '/Apps/filejam/'
 let fs = require('fs')
 const FileSync = require('lowdb/adapters/FileSync')
 let brands = ["Cosmopolitan", "Elle", "Esquire", "Harpers Bazaar"]
-let feed = {}
 // const low = require('lowdb')
 // const adapter = new FileSync('db.json')
 // const db = low(adapter)
 // db.defaults({ "Cosmopolitan": {}, "Elle": {}, "Esquire": {}, "Harpers Bazaar": {}})
 //   .write()
-
-let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
-let targetFiles = []
-
-let populate = () => {
-  feed = brands.reduce((acc, curr) => {
+let  feed = brands.reduce((acc, curr) => {
           acc[curr] = {}
           return acc
         }, {})
   console.log(feed)
 
+let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
+let targetFiles = []
+
+let populate = () => {
+
+
   
-  let fakeProjects = [ "Wonder Woman\'s Gal Gadot", "Instagram Illusions" ]
-  
-  return fakeProjects
+  return brands
 }
 
 let upload = (body, files) => {
   let poster = files.canvasImage[0].path
+  
+  feed[body.brand][body.project] = {}
+  console.log(feed)
   
   fs.readFile(poster, (err, data) => {
     send(data)

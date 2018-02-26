@@ -13,10 +13,8 @@ html
     main
       p Brand Name
       select#brand(name="brands")
-        option(value="COSMOPOLITAN") Cosmopolitan
-        option(value="ELLE") Elle
-        option(value="ESQUIRE") Esquire
-        option(value="HARPERSBAZAAR") Harper's Bazaar
+        each brand in brands
+          option(value=brand) #{brand}
       br
       label Project Name 
       input#projects
