@@ -10,10 +10,7 @@ let brands = ["Cosmopolitan", "Elle", "Esquire", "Harpers Bazaar"]
 let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
 let targetFiles = []
 
-let populate = () => {
-
-
-  
+let populate = () => { 
   return brands
 }
 
