@@ -12,13 +12,20 @@ let upload = (body, files) => {
   // console.log('body')
   let poster = files.canvasImage[0].path
   let buff = Buffer.from(poster);
-console.log(buff.toString('utf8'));
-  fs.readFileSync(poster, (err, data) => { 
-    console.log('data')
-
-    console.log(data)
+  fs.readFile(poster, (err, data) => {
+    doit(data)
+    .then((metadata) => {
+      console.log(metadata)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
   })
-
+  
+  function doit(data) {
+    let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
+    return dbx.filesUpload({contents: data, path:`${pathToApp + body.project}/${body.name.replace('mp4','jpg')}`, mode: 'overwrite'}) 
+  }
   
   // let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
   // dbx.filesUpload({contents: buff, path:`${pathToApp + body.project}/${body.name.replace('mp4','jpg')}`, mode: 'overwrite'})
