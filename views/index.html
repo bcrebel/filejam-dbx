@@ -194,7 +194,8 @@
       };
       
       file = {
-        // Unique ID for the file, compatible with Dropbox API v2.
+       document.getElementById("videos").appendChild(videoButton);
+       // Unique ID for the file, compatible with Dropbox API v2.
         id: "id:...",
 
         // Name of the file.
@@ -212,7 +213,6 @@
       // var projectButton = Dropbox.createChooseButton(projectOptions);
       var videoButton = Dropbox.createChooseButton(videoOptions);
       // document.getElementById("project").appendChild(projectButton);
-      document.getElementById("videos").appendChild(videoButton);
     </script>
   </body>
 </html>
