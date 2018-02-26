@@ -7,6 +7,8 @@ var app = express();
 var bodyParser = require('body-parser');
 let { upload, populate }  = require('./dropbox.js')
 
+app.set('view engine', 'pug')
+
 app.use(bodyParser.json({limit: '50mb', extended: true})); // for parsing application/json
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true })); // for parsing application/x-www-form-urlencoded
 let multer = require('multer');
@@ -17,7 +19,9 @@ app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function (request, response) {
-  response.sendFile(__dirname + '/views/index.html');
+  // response.sendFile(__dirname + '/views/index.html');
+  response.render('index', {  })
+
 });
 
 // could also use the POST body instead of query string: http://expressjs.com/en/api.html#req.body
