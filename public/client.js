@@ -3,7 +3,8 @@
       let projectName = '';
       let fileName = '';
       let videos = [];
- 
+      let uploads = 0
+      
       function dataURItoBlob(dataURI) {
           // convert base64/URLEncoded data component to raw binary data held in a string
           var byteString;
@@ -20,7 +21,8 @@
           for (var i = 0; i < byteString.length; i++) {
               ia[i] = byteString.charCodeAt(i);
           }
-
+          
+          uploads += 1
           return new Blob([ia], {type:mimeString});
       }
 
@@ -81,6 +83,7 @@
         
         videos.forEach((video, idx) => { 
           fileName = video.name
+          
 
           getVideoImage(video.link,
             function() {
@@ -97,12 +100,12 @@
               console.log(video.name)
               fd.append("canvasImage", blob);
               fd.append("videoLink", video.link); // You'll need to change this to be an index
-              console.log('idx')
-            console.log(idx)
+              console.log('uploads')
+            console.log(uploads)
                         console.log('videos.length')
-
+  
             console.log(videos.length)
-              if(idx == videos.length - 1) { return sendForm() }
+              if(uploads == videos.length) { return sendForm() }
             }           
           )          
         })
