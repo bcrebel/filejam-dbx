@@ -5,5 +5,6 @@
 // add other scripts at the bottom of index.html
 
 $(function() {
+      document.getElementById("videos").appendChild(videoButton);
 
 });
