@@ -6,6 +6,8 @@ const FileSync = require('lowdb/adapters/FileSync')
 const low = require('lowdb')
 const adapter = new FileSync('db.json')
 const db = low(adapter)
+db.defaults({ "Cosmopolitan": {}, "Elle": {}, "Esquire": {}, "Harpers Bazaar": {}})
+  .write()
 
 let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
 let targetFiles = []
