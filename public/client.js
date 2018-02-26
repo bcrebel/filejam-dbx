@@ -5,7 +5,7 @@
       let videos = [];
       
       function syncMe() {
-        
+        function 
         function getVideoImage(path, secs, callback) {
           var me = this, video = document.createElement('video');
           video.crossOrigin = "Anonymous";
@@ -45,7 +45,7 @@
         fileName = videos[0].name
       
 
-        getVideoImage(videos[0].link,
+        getVideoImage(video.link,
           function() {
             return 0;
           },
