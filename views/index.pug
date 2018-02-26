@@ -18,11 +18,11 @@ html
         option(value="ESQUIRE") Esquire
         option(value="HARPERSBAZAAR") Harper's Bazaar
       br
-      p Project Name 
+      label Project Name 
       select(id="project" name="project")
         each project in projects
           option(value=project) #{project}
-      p Select Videos
+      label Select Videos
       div#videos
       ul#video-list
       button(onClick="syncMe()") Sync Me

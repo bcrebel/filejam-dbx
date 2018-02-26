@@ -36,6 +36,11 @@ form {
   border-radius: 3px;
 }
 
+label {
+  display: block;
+  margin: 10px 0;
+}
+
 input {
   display: block;
   margin-bottom: 10px;
