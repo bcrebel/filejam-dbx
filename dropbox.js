@@ -10,7 +10,7 @@ let populate = () => {
   
   function isFolder(file) {
     // console.log(file)
-    if( !file['.tag'] == 'folder' ) {
+    if( file['.tag'] != 'folder' ) {
       return false
     } else {
       return true
