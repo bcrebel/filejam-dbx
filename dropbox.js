@@ -15,7 +15,6 @@ let populate = () => {
 }
 
 let upload = (body, files) => {
-  let poster = files.canvasImage[0].path;
   let feed = {}
   feed[body.brand] = {}
   feed[body.brand][body.project] = {"slides": []}
@@ -23,8 +22,13 @@ let upload = (body, files) => {
   
   console.log(util.inspect(feed, { showHidden: true, depth: null }))
   
-  files.canvasImage.forEach((image, idx) => {})
-  function doit() {
+  files.canvasImage.forEach((image, idx) => {
+    doit(image, idx)
+  })
+  
+  function doit(image, idx) {
+    let poster = files.canvasImage[idx].path;
+
     fs.readFile(poster, (err, data) => {
       send(data)
       .then((posterMetadata) => {
@@ -36,7 +40,7 @@ let upload = (body, files) => {
           console.log(linkMetadata.url)
           let video = { video: {} }
           let poster = { poster: {} }
-          video['video'][body.name] = body.videoLink
+          video['video'][body.name[idx]] = body.videoLink[idx]
           poster['poster'][posterMetadata.name] = linkMetadata.url.replace('dl=0', 'dl=1')
           feed[body.brand][body.project]["slides"].push(video, poster)
 
@@ -55,8 +59,8 @@ let upload = (body, files) => {
       })
     })  
   }
-  function send(data) {
-    return dbx.filesUpload({contents: data, path:`${pathToApp + body.brand}/${body.project}/${body.name.replace('mp4','jpg')}`, mode: 'overwrite'})
+  function send(data, idx) {
+    return dbx.filesUpload({contents: data, path:`${pathToApp + body.brand}/${body.project}/${body.name[idx].replace('mp4','jpg')}`, mode: 'overwrite'})
   }
   
   function createLink(path) {
