@@ -5,7 +5,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-let { upload }  = require('./dropbox.js')
+let { upload, populate }  = require('./dropbox.js')
 
 app.use(bodyParser.json({limit: '50mb', extended: true})); // for parsing application/json
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true })); // for parsing application/x-www-form-urlencoded

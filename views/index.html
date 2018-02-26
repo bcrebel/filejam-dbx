@@ -52,6 +52,7 @@
     <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="e4gpfs0pj8z43oz"></script>
     <script src="/client.js"></script>
     <script>
+      let brands = []
       let brand = '';
       let projectName = '';
       let fileName = '';
@@ -207,7 +208,7 @@
         // URL to a 64x64px icon for the file based on the file's extension.
         icon: "https://..."
       };
-    
+      console.log(brands)
       // var projectButton = Dropbox.createChooseButton(projectOptions);
       var videoButton = Dropbox.createChooseButton(videoOptions);
       // document.getElementById("project").appendChild(projectButton);
