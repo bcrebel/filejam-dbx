@@ -17,28 +17,26 @@
     </header>
 
     <main>
-    <div>
-      <div>
-        <p id="brand">Brand Name</p>
-        <form action="/brands">
-          <select name="brands">
+      <p id="brand">Brand Name</p>
+        <select id="brands" name="brands">
           <option value="COSMOPOLITAN">Cosmopolitan</option>
           <option value="ELLE">Elle</option>
           <option value="ESQUIRE">Esquire</option>
           <option value="HARPERSBAZAAR">Harper's Bazaar</option>
         </select>
         <br><br>
-         <p id="name">Project Name</p>
-         <div id="project"></div> 
-          <p>Select Videos</p>
-          <div id="videos"></div>
-          <ul id="video-list"></ul>
-        <button onclick="syncMe()">Sync Me</button>
-      </form>
+      
+        <p id="name">Project Name</p>
+        <select id="project" name= "project">
+          
+        </select>
+        <p>Select Videos</p>
+        <div id="videos"></div>
+        <ul id="video-list"></ul>
+      <button onclick="syncMe()">Sync Me</button>
 
       <ol id="frame"></ol>
 
-      </div>
       
       <div id="thumbs"></div>
     </main>
@@ -95,7 +93,12 @@
           video.src = path;
         }
         
+        // Declare values from selects here
+        brand = $( "#brand" ).val();
+        projectName = $( "project"
         fileName = videos[0].name
+        
+        
 
         getVideoImage(videos[0].link,
           function() {
@@ -147,21 +150,21 @@
       
       
       
-      projectOptions = {
+//       projectOptions = {
 
-        // Required. Called when a user selects an item in the Chooser.
-        success: function(files) {
-          projectName = files[0].name;
-          document.getElementById("name").innerHTML = `Project Name: ${projectName}`
-        },
-        // Optional. Called when the user closes the dialog without selecting a file
-        // and does not include any parameters.
-        cancel: function() {
+//         // Required. Called when a user selects an item in the Chooser.
+//         success: function(files) {
+//           projectName = files[0].name;
+//           document.getElementById("name").innerHTML = `Project Name: ${projectName}`
+//         },
+//         // Optional. Called when the user closes the dialog without selecting a file
+//         // and does not include any parameters.
+//         cancel: function() {
 
-        },
-        multiselect: false, 
-        folderselect: true, 
-      };
+//         },
+//         multiselect: false, 
+//         folderselect: true, 
+//       };
       
       videoOptions = {
 
@@ -206,9 +209,9 @@
         icon: "https://..."
       };
     
-      var projectButton = Dropbox.createChooseButton(projectOptions);
+      // var projectButton = Dropbox.createChooseButton(projectOptions);
       var videoButton = Dropbox.createChooseButton(videoOptions);
-      document.getElementById("project").appendChild(projectButton);
+      // document.getElementById("project").appendChild(projectButton);
       document.getElementById("videos").appendChild(videoButton);
     </script>
   </body>
