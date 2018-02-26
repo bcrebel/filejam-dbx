@@ -45,14 +45,15 @@ let upload = (body, files) => {
           feed[body.brand][body.project]["slides"].push({})
           let slide = Object.assign({}, video, poster)
           console.log('slide')
-                    console.log(slide)
+          console.log(slide)
 
           feed[body.brand][body.project]["slides"][idx] = slide;
-
           console.log(util.inspect(feed, { showHidden: true, depth: null }))
         })
         .catch((error) => {
-          console.log(error)
+           if (error.status == 409) {
+             setTimeout(function() { return send(data,idx) }, 300000);
+           }        
         })
 
         // Add link to video to feed
@@ -64,6 +65,7 @@ let upload = (body, files) => {
       })
     })  
   }
+  
   function send(data, idx) {
     console.log('body.name')
     console.log(body.name)
