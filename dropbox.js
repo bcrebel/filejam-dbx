@@ -3,22 +3,24 @@ const Dropbox = require('dropbox').Dropbox;
 let pathToApp = '/Apps/filejam/'
 let fs = require('fs')
 const FileSync = require('lowdb/adapters/FileSync')
-const low = require('lowdb')
-const adapter = new FileSync('db.json')
-const db = low(adapter)
-db.defaults({ "Cosmopolitan": {}, "Elle": {}, "Esquire": {}, "Harpers Bazaar": {}})
-  .write()
+let brands = ["Cosmopolitan", "Elle", "Esquire", "Harpers Bazaar"]
+let feed = {}
+// const low = require('lowdb')
+// const adapter = new FileSync('db.json')
+// const db = low(adapter)
+// db.defaults({ "Cosmopolitan": {}, "Elle": {}, "Esquire": {}, "Harpers Bazaar": {}})
+//   .write()
 
 let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
 let targetFiles = []
 
 let populate = () => {
-  
-  db.get("Cosmopolitan")
-  .set( "Wonder Woman's Gal Gadot", "{}")
-  .write()
-  
-  console.log('pop')
+  feed = brands.reduce((acc, curr) => {
+          acc[curr] = {}
+          return acc
+        }, {})
+  console.log(feed)
+
   
   let fakeProjects = [ "Wonder Woman\'s Gal Gadot", "Instagram Illusions" ]
   
