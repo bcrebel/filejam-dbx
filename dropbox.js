@@ -27,6 +27,8 @@ let upload = (body, files) => {
   let feed = {}
   feed[body.brand] = {}
   feed[body.brand][body.project] = {"slides": []}
+  feed[body.brand][body.project]["slides"].push({ "video" : {body.name: body.videoLink}})
+
   console.log(feed)
   
   fs.readFile(poster, (err, data) => {
