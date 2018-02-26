@@ -29,9 +29,29 @@
       function syncMe() {
         function getVideoImage(path, secs) {
           return new Promise((resolve, reject) => {
-            let me = this, 
+            let me = this, video = document.createElement('video');
+            video.crossOrigin = 'Anonymous'; // Bump tainted canvases
+            
+            video.onloadedmetadata = function() {
+              this.currentTime = Math.min(Math.max(0, (secs < 0 ? this.duration : 0) + secs), this.duration);
+            }
+            
+            video.onseeked = function(e) {
+              let canvas = document.createElement('canvas');
+              canvas.height = video.videoHeight;
+              canvas.width = video.videoWidth;
+              
+              let ctx = canvas.getContext('2d');
+              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+              
+              let img = new Image();
+              img.src = canvas.toDataURL('image/jpeg', 1.0);
+              
+              resolve(img)
+            }
           })
         }
+        
         function getVideoImage(path, secs, callback) {
           var me = this, video = document.createElement('video');
           video.crossOrigin = "Anonymous";
