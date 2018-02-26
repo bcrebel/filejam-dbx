@@ -6,12 +6,13 @@
       let uploads = 0
       
       function dataURItoBlob(dataURI) {
-          // convert base64/URLEncoded data component to raw binary data held in a string
+        return new Promise ((resolve, reject) => {
           var byteString;
+
           if (dataURI.split(',')[0].indexOf('base64') >= 0)
-              byteString = atob(dataURI.split(',')[1]);
+            byteString = atob(dataURI.split(',')[1]);
           else
-              byteString = unescape(dataURI.split(',')[1]);
+            byteString = unescape(dataURI.split(',')[1]);
 
           // separate out the mime component
           var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
@@ -21,9 +22,12 @@
           for (var i = 0; i < byteString.length; i++) {
               ia[i] = byteString.charCodeAt(i);
           }
-          
+
           uploads += 1
-          return new Blob([ia], {type:mimeString});
+          resolve( new Blob([ia], {type:mimeString}) )
+        })
+          // convert base64/URLEncoded data component to raw binary data held in a string
+          
       }
 
       function syncMe() {
@@ -52,38 +56,39 @@
           })
         }
         
-        function getVideoImage(path, secs, callback) {
-          var me = this, video = document.createElement('video');
-          video.crossOrigin = "Anonymous";
+        
+//         function getVideoImage(path, secs, callback) {
+//           var me = this, video = document.createElement('video');
+//           video.crossOrigin = "Anonymous";
 
-          video.onloadedmetadata = function() {
-            if ('function' === typeof secs) {
-              secs = secs(this.duration);
-            }
+//           video.onloadedmetadata = function() {
+//             if ('function' === typeof secs) {
+//               secs = secs(this.duration);
+//             }
             
-            this.currentTime = Math.min(Math.max(0, (secs < 0 ? this.duration : 0) + secs), this.duration);
-          };
+//             this.currentTime = Math.min(Math.max(0, (secs < 0 ? this.duration : 0) + secs), this.duration);
+//           };
           
-          video.onseeked = function(e) {
-            var canvas = document.createElement('canvas');
-            canvas.height = video.videoHeight;
-            canvas.width = video.videoWidth;
+//           video.onseeked = function(e) {
+//             var canvas = document.createElement('canvas');
+//             canvas.height = video.videoHeight;
+//             canvas.width = video.videoWidth;
             
-            var ctx = canvas.getContext('2d');
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+//             var ctx = canvas.getContext('2d');
+//             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            var img = new Image();
-            img.src = canvas.toDataURL('image/jpeg', 1.0);
+//             var img = new Image();
+//             img.src = canvas.toDataURL('image/jpeg', 1.0);
             
-            callback.call(me, img, this.currentTime, e);
-          };
+//             callback.call(me, img, this.currentTime, e);
+//           };
           
-          video.onerror = function(e) {
-            callback.call(me, undefined, undefined, e);
-          };
+//           video.onerror = function(e) {
+//             callback.call(me, undefined, undefined, e);
+//           };
           
-          video.src = path;
-        }
+//           video.src = path;
+//         }
         
         // Declare values from selects here
         brand = $( "#brand" ).val();
@@ -108,35 +113,23 @@
         
         videos.forEach((video, idx) => { 
           fileName = video.name
-          
 
-          getVideoImage(video.link,
-            function() {
-              return 0;
-            },
-                 
-            function(img, secs, event) {
-              var blob = dataURItoBlob(img.src);
-
+          getVideoImage(video.link)
+          .then((img) => {
+            dataURItoBlob(img.src)
+            .then((blob) => {
               fd.set("brand", brand)
               fd.set("project", projectName);
               fd.append("name", video.name); 
-              console.log('video.name')
-              console.log(video.name)
               fd.append("canvasImage", blob);
               fd.append("videoLink", video.link); // You'll need to change this to be an index
-              console.log('uploads')
-              console.log(uploads)
-              console.log('videos.length')
-  
-            console.log(videos.length)
-              if(uploads == videos.length) { return sendForm() }
-            }           
-          )          
+               
+              if(uploads == videos.length) { return sendForm() } 
+            })
+          })
         })
       }
-    
-      
+                       
       videoOptions = {
 
         // Required. Called when a user selects an item in the Chooser.
