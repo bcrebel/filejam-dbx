@@ -18,9 +18,11 @@ let upload = (body, files) => {
   let feed = {}
   feed[body.brand] = {}
   feed[body.brand][body.project] = {"slides": []}
+  console.log('body')
+  console.log(body)
+
   
-  
-  console.log(util.inspect(feed, { showHidden: true, depth: null }))
+  // console.log(util.inspect(feed, { showHidden: true, depth: null }))
   
   files.canvasImage.forEach((image, idx) => {
     doit(image, idx)
@@ -32,12 +34,12 @@ let upload = (body, files) => {
     fs.readFile(poster, (err, data) => {
       send(data, idx)
       .then((posterMetadata) => {
-        console.log(posterMetadata)
+        // console.log(posterMetadata)
         // Add link to poster to feed
 
         createLink(posterMetadata.path_lower)
         .then((linkMetadata) => {
-          console.log(linkMetadata.url)
+          // console.log(linkMetadata.url)
           let video = { video: {} }
           let poster = { poster: {} }
           video['video'][body.name[idx]] = body.videoLink[idx]
@@ -51,9 +53,7 @@ let upload = (body, files) => {
           console.log(util.inspect(feed, { showHidden: true, depth: null }))
         })
         .catch((error) => {
-           if (error.status == 409) {
-             setTimeout(function() { return send(data,idx) }, 300000);
-           }        
+          console.log(error)      
         })
 
         // Add link to video to feed
@@ -61,7 +61,9 @@ let upload = (body, files) => {
         fs.unlinkSync(poster)
       })
       .catch((error) => {
-        console.log(error)
+         if (error.status == 429) {
+           setTimeout(function() { return send(data,idx) }, 300000);
+         }  
       })
     })  
   }
