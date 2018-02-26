@@ -63,10 +63,23 @@
         projectName = $( "#projects" ).val();
         let fd = new FormData(document.forms[0]);
 
-
+        function sendForm() {
+          return $.ajax({
+            url : "/posters",
+            type: "POST",
+            cache: false,
+            async: false,
+            processData: false,
+            contentType: false,
+            data: fd,
+            success: function(data) {
+              console.log(data); // 'OK'
+            }
+          })
+        }
+        
         videos.forEach((video) => { 
           fileName = video.name
-
 
           getVideoImage(video.link,
             function() {
@@ -87,18 +100,9 @@
           )          
         })
         
-        $.ajax({
-          url : "/posters",
-          type: "POST",
-          cache: false,
-          async: false,
-          processData: false,
-          contentType: false,
-          data: fd,
-          success: function(data) {
-            console.log(data); // 'OK'
-          }
-        })
+        setTimeout(sendForm(), 10000);
+
+        
       }
     
       
