@@ -20,8 +20,8 @@ html
       br
       p Project Name 
       select(id="project" name="project")
-        each brands, index in brands
-          option(value=`#{index}`)
+        each project in projects
+          option(value='#{project}')
       p Select Videos
       div#videos
       ul#video-list

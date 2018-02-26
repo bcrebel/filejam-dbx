@@ -28,4 +28,4 @@ let upload = (body, files) => {
   }
 }
 
-module.exports = { upload }
+module.exports = { upload, populate }
