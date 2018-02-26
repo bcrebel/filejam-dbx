@@ -6,25 +6,27 @@ let fs = require('fs')
 
 
 let upload = (body, files) => {
-  console.log('files')
-  console.log(files)
-  console.log(body)
-  console.log('body')
+  // console.log('files')
+  // console.log(files)
+  // console.log(body)
+  // console.log('body')
   let poster = files.canvasImage[0].path
   let buff = Buffer.from(poster);
-  let json = JSON.stringify(buff);
-    console.log('json');
+console.log(buff.toString('utf8'));
+  fs.readFileSync(poster, (err, data) => { 
+    console.log('data')
 
-  console.log(json);
+    console.log(data)
+  })
 
   
-  let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
-  dbx.filesUpload({contents: buff, path:`${pathToApp + body.project}/${body.name.replace('mp4','jpg')}`, mode: 'overwrite'})
-  .then((metadata) => { 
-    console.log('metadata')
-    console.log(metadata)
-  })
-  .catch((error) => {console.log(error)})
+  // let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
+  // dbx.filesUpload({contents: buff, path:`${pathToApp + body.project}/${body.name.replace('mp4','jpg')}`, mode: 'overwrite'})
+  // .then((metadata) => { 
+  //   console.log('metadata')
+  //   console.log(metadata)
+  // })
+  // .catch((error) => {console.log(error)})
 
   // return dbx.filesUploadSessionStart({content: poster, path: `${pathToApp + body.project}/${body.name}.jpg`})
   // .then((response) => {
