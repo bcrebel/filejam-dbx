@@ -9,21 +9,25 @@ let populate = () => {
   let fakeProjects = [ "Wonder Woman\'s Gal Gadot", "Instagram Illusions" ]
   
   function isFolder(file) {
-    console.log(file)
-    return file['.tag'] == 'folder' ? true : false
+    // console.log(file)
+    if( !file['.tag'] == 'folder' ) {
+      return false
+    } else {
+      return true
+    }
   }
   
   let getFiles = (path, condition) => {
     return new Promise((resolve, reject) => {
       
-      let start = dbx.filesListFolder({ path: path, recursive: true, include_media_info: true, limit: 5 })
+      let start = dbx.filesListFolder({ path: path, recursive: true, limit: 5 })
       
       return build()
       
       function pushFiles(entries) {
         entries.forEach((file) => {
           if(condition(file)) {
-            targetFiles.push(file)
+            targetFiles.push(file.name)
           }
         })
       }
@@ -57,7 +61,7 @@ let populate = () => {
     })
   } 
   
-  getFiles('/STAMP/COSMO/Projects', isFolder)
+  getFiles('/STAMP/Esquire/Projects', isFolder)
   .then((files) => {
     console.log(files)
   })
