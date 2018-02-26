@@ -32,15 +32,18 @@
 
       function syncMe() {
         function getVideoImage(path, secs) {
+          console.log('start getVideoImage')
           return new Promise((resolve, reject) => {
-            let me = this, video = document.createElement('video');
+          var me = this, video = document.createElement('video');
             video.crossOrigin = 'Anonymous'; // Bump tainted canvases
             
             video.onloadedmetadata = function() {
               this.currentTime = Math.min(Math.max(0, (secs < 0 ? this.duration : 0) + secs), this.duration);
+              console.log(this.currentTime)
             }
             
             video.onseeked = function(e) {
+              console.log('videoseeked')
               let canvas = document.createElement('canvas');
               canvas.height = video.videoHeight;
               canvas.width = video.videoWidth;
@@ -50,7 +53,7 @@
               
               let img = new Image();
               img.src = canvas.toDataURL('image/jpeg', 1.0);
-              
+              console.log(img)
               resolve(img)
             }
           })
@@ -114,7 +117,7 @@
         videos.forEach((video, idx) => { 
           fileName = video.name
 
-          getVideoImage(video.link)
+          getVideoImage(video.link, 0)
           .then((img) => {
             dataURItoBlob(img.src)
             .then((blob) => {
@@ -123,9 +126,14 @@
               fd.append("name", video.name); 
               fd.append("canvasImage", blob);
               fd.append("videoLink", video.link); // You'll need to change this to be an index
-               
+              
+              console.log('uploads')
+              console.log(uploads)
+              console.log(videos.length)
+              console.log(videos.length)
               if(uploads == videos.length) { return sendForm() } 
             })
+            .catch((error) => { console.log(error)})
           })
         })
       }
