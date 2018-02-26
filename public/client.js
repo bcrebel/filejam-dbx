@@ -27,6 +27,11 @@
       }
 
       function syncMe() {
+        function getVideoImage(path, secs) {
+          return new Promise((resolve, reject) => {
+            let me = this, 
+          })
+        }
         function getVideoImage(path, secs, callback) {
           var me = this, video = document.createElement('video');
           video.crossOrigin = "Anonymous";
@@ -101,8 +106,8 @@
               fd.append("canvasImage", blob);
               fd.append("videoLink", video.link); // You'll need to change this to be an index
               console.log('uploads')
-            console.log(uploads)
-                        console.log('videos.length')
+              console.log(uploads)
+              console.log('videos.length')
   
             console.log(videos.length)
               if(uploads == videos.length) { return sendForm() }
