@@ -6,6 +6,7 @@ let pathToApp = '/Apps/filejam/'
 let fs = require('fs')
 const FileSync = require('lowdb/adapters/FileSync')
 let brands = ["Cosmopolitan", "Elle", "Esquire", "Harpers Bazaar"]
+let _ = require('lodash');
 
 let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
 let targetFiles = []
@@ -34,20 +35,17 @@ let upload = (body, files) => {
     fs.readFile(poster, (err, data) => {
       send(data, image.originalname)
       .then((posterMetadata) => {
-        // console.log(posterMetadata)
-        // Add link to poster to feed
+
 
         createLink(posterMetadata.path_lower)
         .then((linkMetadata) => {
-          // console.log(linkMetadata.url)
           let video = { video: {} }
           let poster = { poster: {} }
           video['video'][image.originalname] = body.videoLink[idx]
           poster['poster'][posterMetadata.name] = linkMetadata.url.replace('dl=0', 'dl=1')
           feed[body.brand][body.project]["slides"].push({})
           let slide = Object.assign({}, video, poster)
-          // console.log('slide')
-          // console.log(slide)
+
 
           feed[body.brand][body.project]["slides"][idx] = slide;
           console.log(util.inspect(feed, { showHidden: true, depth: null }))
