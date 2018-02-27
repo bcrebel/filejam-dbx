@@ -18,8 +18,8 @@ let upload = (body, files) => {
   let feed = {}
   feed[body.brand] = {}
   feed[body.brand][body.project] = {"slides": []}
-  console.log('body')
-  console.log(body)
+  // console.log('body')
+  // console.log(body)
 
   
   // console.log(util.inspect(feed, { showHidden: true, depth: null }))
@@ -46,14 +46,16 @@ let upload = (body, files) => {
           poster['poster'][posterMetadata.name] = linkMetadata.url.replace('dl=0', 'dl=1')
           feed[body.brand][body.project]["slides"].push({})
           let slide = Object.assign({}, video, poster)
-          console.log('slide')
-          console.log(slide)
+          // console.log('slide')
+          // console.log(slide)
 
           feed[body.brand][body.project]["slides"][idx] = slide;
           console.log(util.inspect(feed, { showHidden: true, depth: null }))
         })
         .catch((error) => {
-          console.log(error)      
+          if (error.status == 429) {
+           setTimeout(function() { return send(data, idx) }, 300000);
+          }
         })
 
         // Add link to video to feed
@@ -61,9 +63,7 @@ let upload = (body, files) => {
         fs.unlinkSync(poster)
       })
       .catch((error) => {
-         if (error.status == 429) {
-           setTimeout(function() { return send(data,idx) }, 300000);
-         }  
+        console.log(error);
       })
     })  
   }
