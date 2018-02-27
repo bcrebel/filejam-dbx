@@ -39,7 +39,6 @@
             video.crossOrigin = 'Anonymous'; // Bump tainted canvases
             
             video.onloadedmetadata = function() {
-              console.log('meta')
               if ('function' === typeof secs) {
                 secs = secs(this.duration);
               }
@@ -48,7 +47,6 @@
             }
             
             video.onseeked = function(e) {
-                console.log('videoseeked')
                 let canvas = document.createElement('canvas');
                 canvas.height = video.videoHeight;
                 canvas.width = video.videoWidth;
@@ -111,12 +109,16 @@
             url : "/posters",
             type: "POST",
             cache: false,
-            // processData: false,
-            // contentType: false,
+            processData: false,
+            contentType: false,
             data: fd,
+            timeout: 5000,
             success: function(data) {
               console.log(data); // 'OK'
             }
+          })
+          .fail(function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown)
           })
         }
         

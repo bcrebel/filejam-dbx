@@ -20,11 +20,7 @@ let upload = (body, files) => {
   feed[body.brand] = {}
   feed[body.brand][body.project] = {"slides": []}
   
-  console.log(body.videoLink)
-  console.log('files')  
-  console.log(files)
-  // console.log(util.inspect(feed, { showHidden: true, depth: null }))
-  
+   
   files.canvasImage.forEach((image, idx) => {
     doit(image, idx)
   })
@@ -39,9 +35,7 @@ let upload = (body, files) => {
         if(posterMetadata == undefined) { 
           return doit(image, idx) } 
         else if (posterMetadata) {
-          console.log('posterMetadata'  )
-          console.log(posterMetadata)
-          createLink(posterMetadata.path_lower)
+            createLink(posterMetadata.path_lower)
 
           .then((linkMetadata) => {
             let video = { video: {} }
