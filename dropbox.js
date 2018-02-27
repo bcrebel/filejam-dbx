@@ -40,31 +40,26 @@ let upload = (body, files) => {
 
         createLink(posterMetadata.path_lower)
         .then((linkMetadata) => {
-          // console.log(linkMetadata.url)
           let video = { video: {} }
           let poster = { poster: {} }
           video['video'][fileNames[idx]] = body.videoLink[idx]
           poster['poster'][posterMetadata.name] = linkMetadata.url.replace('dl=0', 'dl=1')
           feed[body.brand][body.project]["slides"].push({})
           let slide = Object.assign({}, video, poster)
-          // console.log('slide')
-          // console.log(slide)
 
           feed[body.brand][body.project]["slides"][idx] = slide;
           console.log(util.inspect(feed, { showHidden: true, depth: null }))
         })
-        .catch((error) => {
-          console.log(error)
-        })
+        // .catch((error) => {
+        //    console.log(error)      
+        // })
 
         // Add link to video to feed
         // Delete local file
         fs.unlinkSync(poster)
       })
       .catch((error) => {
-        if (error.status == 429) {
-         setTimeout(function() { return send(data, idx) }, 300000);
-        }      
+        console.log(error)     
       })
     })  
   }
@@ -75,6 +70,11 @@ let upload = (body, files) => {
   
   function createLink(path) {
     return dbx.sharingCreateSharedLink({path: path})
+    .catch((error) => {
+      if (error.status == 429) {
+       setTimeout(function() { return createLink(path) }, 300000);
+      }    
+    })
   }
 }
 
