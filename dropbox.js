@@ -36,8 +36,9 @@ let upload = (body, files) => {
       
         .then((posterMetadata) => {
         if(posterMetadata == undefined) { 
-          return doit(image, idx) } 
-        else if (posterMetadata) {
+          // console.log('no poster made')
+          return doit(image, idx)  
+        } else if (posterMetadata) {
             createLink(posterMetadata.path_lower)
 
           .then((linkMetadata) => {
