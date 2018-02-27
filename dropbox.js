@@ -36,25 +36,29 @@ let upload = (body, files) => {
       send(data, image.originalname)
       
         .then((posterMetadata) => {
-        createLink(posterMetadata.path_lower)
+        if(posterMetadata == undefined) { 
+          return doit(image, idx) } 
+        else {
+          createLink(posterMetadata.path_lower)
 
-        .then((linkMetadata) => {
-          let video = { video: {} }
-          let poster = { poster: {} }
-          video['video'][image.originalname] = body.videoLink[idx]
-          poster['poster'][posterMetadata.name] = linkMetadata.url.replace('dl=0', 'dl=1')
-          feed[body.brand][body.project]["slides"].push({})
-          let slide = Object.assign({}, video, poster)
-
-          
-          feed[body.brand][body.project]["slides"][idx] = slide;
-          console.log(util.inspect(feed, { showHidden: true, depth: null }))
-        })
+          .then((linkMetadata) => {
+            let video = { video: {} }
+            let poster = { poster: {} }
+            video['video'][image.originalname] = body.videoLink[idx]
+            poster['poster'][posterMetadata.name] = linkMetadata.url.replace('dl=0', 'dl=1')
+            feed[body.brand][body.project]["slides"].push({})
+            let slide = Object.assign({}, video, poster)
 
 
-        // Add link to video to feed
-        // Delete local file
-        fs.unlinkSync(poster)
+            feed[body.brand][body.project]["slides"][idx] = slide;
+            console.log(util.inspect(feed, { showHidden: true, depth: null }))
+          })
+
+
+          // Add link to video to feed
+          // Delete local file
+          fs.unlinkSync(poster)
+        }
       })
       .catch((error) => {
         console.log(error)     

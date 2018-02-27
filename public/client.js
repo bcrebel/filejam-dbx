@@ -111,7 +111,6 @@
             url : "/posters",
             type: "POST",
             cache: false,
-            async: false,
             processData: false,
             contentType: false,
             data: fd,
