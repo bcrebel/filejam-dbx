@@ -63,6 +63,8 @@ let upload = (body, files) => {
               console.log(video)
 
               feed[body.brand][body.project]["slides"][idx] = slide;
+              _.remove(feed[body.brand][body.project]["slides"], _.isEmpty)
+
               console.log(util.inspect(feed, { showHidden: true, depth: null }))
             }
           })
