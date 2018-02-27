@@ -52,18 +52,19 @@ let upload = (body, files) => {
             createLink(posterMetadata.path_lower)
 
           .then((linkMetadata) => {
-            con
-            let video = { video: {} }
-            let poster = { poster: {} }
-            video['video'][image.originalname] = body.videoLink[idx]
-            poster['poster'][posterMetadata.name] = linkMetadata.url.replace('dl=0', 'dl=1')
-            feed[body.brand][body.project]["slides"].push({})
-            let slide = Object.assign({}, video, poster)
-            console.log('video')
-            console.log(video)
+            if(linkMetadata) {
+              let video = { video: {} }
+              let poster = { poster: {} }
+              video['video'][image.originalname] = body.videoLink[idx]
+              poster['poster'][posterMetadata.name] = linkMetadata.url.replace('dl=0', 'dl=1')
+              feed[body.brand][body.project]["slides"].push({})
+              let slide = Object.assign({}, video, poster)
+              console.log('video')
+              console.log(video)
 
-            feed[body.brand][body.project]["slides"][idx] = slide;
-            console.log(util.inspect(feed, { showHidden: true, depth: null }))
+              feed[body.brand][body.project]["slides"][idx] = slide;
+              console.log(util.inspect(feed, { showHidden: true, depth: null }))
+            }
           })
 
 

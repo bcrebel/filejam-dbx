@@ -114,7 +114,7 @@
             processData: false,
             contentType: false,
             data: fd,
-            timeout: 10000,
+            timeout: 20000,
             error: function(jqXHR, textStatus, errorThrown) {
               console.log(errorThrown)
             },
