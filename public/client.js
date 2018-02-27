@@ -31,7 +31,7 @@
       }
 
       function syncMe() {
-        
+        console.log('sync')
         function getVideoImage(path, secs) {
           return new Promise((resolve, reject) => {
 
@@ -112,7 +112,7 @@
             processData: false,
             contentType: false,
             data: fd,
-            timeout: 5000,
+            timeout: 10000,
             success: function(data) {
               console.log(data); // 'OK'
             }
@@ -135,10 +135,7 @@
               fd.append("canvasImage", blob, video.name);
               fd.append("videoLink", video.link); // You'll need to change this to be an index
               
-              console.log('uploads')
-              console.log(uploads)
-              console.log(videos.length)
-              console.log(videos.length)
+
               if(uploads == videos.length) { return sendForm() } 
             })
             .catch((error) => { console.log(error)})
@@ -188,7 +185,6 @@
         // URL to a 64x64px icon for the file based on the file's extension.
         icon: "https://..."
       };
-      console.log(brands)
       var videoButton = Dropbox.createChooseButton(videoOptions);
       document.getElementById("videos").appendChild(videoButton);
 
