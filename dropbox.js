@@ -34,7 +34,8 @@ let upload = (body, files) => {
 
     fs.readFile(poster, (err, data) => {
       send(data, image.originalname)
-      .then((posterMetadata) => {
+      
+        .then((posterMetadata) => {
         createLink(posterMetadata.path_lower)
 
         .then((linkMetadata) => {
@@ -55,15 +56,21 @@ let upload = (body, files) => {
         // Delete local file
         fs.unlinkSync(poster)
       })
-      // .catch((error) => {
-      //   console.log(error)     
-      // })
+      .catch((error) => {
+        console.log(error)     
+      })
       
     })  
   }
   
   function send(data, name) {
     return dbx.filesUpload({contents: data, path:`${pathToApp + body.brand}/${body.project}/${name.replace('mp4','jpg')}`, mode: 'overwrite'})
+    .catch((error) => {
+      console.log(error)
+      if (error.status == 429) {
+        setTimeout(function() { return doit(data, name) }, 300000);
+      }          
+    })
   }
   
   function createLink(path) {
