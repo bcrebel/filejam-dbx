@@ -77,7 +77,7 @@ let upload = (body, files) => {
   function send(data, name) {
     return dbx.filesUpload({contents: data, path:`${pathToApp + body.brand}/${body.project}/${name.replace('mp4','jpg')}`, mode: 'overwrite'})
     .catch((error) => {
-      console.log(error)
+      console.log(error.error)
       if (error.status == 429) {
         console.log('from error.status')
         setTimeout(function() { return send(data, name) }, 300000);
