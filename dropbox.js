@@ -22,11 +22,15 @@ let upload = (body, files) => {
   
   function process() {
       files.canvasImage.forEach((image, idx, arr) => {
-        doit(image, idx)
-        if(idx === arr.length - 1) { 
-          console.log('should be final')
-          console.log(util.inspect(feed, { showHidden: true, depth: null }))
-        }
+        console.log('idx')
+        console.log(idx)
+        console.log('arr.length')
+        console.log(arr.length)
+        doit(image, idx, arr)
+        // if(idx === arr.length - 1) { 
+        //   console.log('should be final')
+        //   console.log(util.inspect(feed, { showHidden: true, depth: null }))
+        // }
       })
   }
 
@@ -34,7 +38,7 @@ let upload = (body, files) => {
 
 
   
-  function doit(image, idx) {
+  function doit(image, idx, arr) {
     let poster = image.path;
 
     fs.readFile(poster, (err, data) => {
@@ -48,6 +52,7 @@ let upload = (body, files) => {
             createLink(posterMetadata.path_lower)
 
           .then((linkMetadata) => {
+            con
             let video = { video: {} }
             let poster = { poster: {} }
             video['video'][image.originalname] = body.videoLink[idx]
@@ -77,7 +82,7 @@ let upload = (body, files) => {
   function send(data, name) {
     return dbx.filesUpload({contents: data, path:`${pathToApp + body.brand}/${body.project}/${name.replace('mp4','jpg')}`, mode: 'overwrite'})
     .catch((error) => {
-      console.log(error)
+      // console.log(error)
       if (error.status == 429) {
         setTimeout(function() { return doit(data, name) }, 300000);
       }          
