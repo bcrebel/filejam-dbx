@@ -18,8 +18,8 @@ let upload = (body, files) => {
   let feed = {}
   feed[body.brand] = {}
   feed[body.brand][body.project] = {"slides": []}
-  // console.log('body')
-  // console.log(body)
+  
+  let fileNames = body.name.sort()
 
   
   // console.log(util.inspect(feed, { showHidden: true, depth: null }))
@@ -42,7 +42,7 @@ let upload = (body, files) => {
           // console.log(linkMetadata.url)
           let video = { video: {} }
           let poster = { poster: {} }
-          video['video'][body.name[idx]] = body.videoLink[idx]
+          video['video'][fileNames[idx]] = body.videoLink[idx]
           poster['poster'][posterMetadata.name] = linkMetadata.url.replace('dl=0', 'dl=1')
           feed[body.brand][body.project]["slides"].push({})
           let slide = Object.assign({}, video, poster)
@@ -69,10 +69,7 @@ let upload = (body, files) => {
   }
   
   function send(data, idx) {
-    console.log('body.name')
-    console.log(body.name)
-    console.log(idx)
-    return dbx.filesUpload({contents: data, path:`${pathToApp + body.brand}/${body.project}/${body.name[idx].replace('mp4','jpg')}`, mode: 'overwrite'})
+    return dbx.filesUpload({contents: data, path:`${pathToApp + body.brand}/${body.project}/${fileNames[idx].replace('mp4','jpg')}`, mode: 'overwrite'})
   }
   
   function createLink(path) {

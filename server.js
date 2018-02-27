@@ -19,17 +19,13 @@ app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function (request, response) {
-  // response.sendFile(__dirname + '/views/index.html');
   let brands = populate()
   response.render('index', { brands: brands })
 
 });
 
-// could also use the POST body instead of query string: http://expressjs.com/en/api.html#req.body
 app.post("/posters", load.fields([{ name: 'brand' }, { name: 'project' }, { name: 'name'}, { name: 'canvasImage' } ]), function (request, response) {
   upload(request.body, request.files)
-  // console.log(request.body)
-  // console.log(request.files)
   response.sendStatus(200);
 });
 
