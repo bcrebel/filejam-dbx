@@ -20,12 +20,20 @@ let upload = (body, files) => {
   feed[body.brand] = {}
   feed[body.brand][body.project] = {"slides": []}
   
-   
-  files.canvasImage.forEach((image, idx) => {
-    doit(image, idx)
+  function process() {
+    return new Promise((resolve, reject) => {
+      files.canvasImage.forEach((image, idx) => {
+        doit(image, idx)
+      })
+      resolve(feed)
+    })
+  }
+  
+  process()
+  .then(() => {
+    console.log('should be final')
+    console.log(util.inspect(feed, { showHidden: true, depth: null }))
   })
-  console.log('final')
-  console.log(util.inspect(feed, { showHidden: true, depth: null }))
 
   
   function doit(image, idx) {
