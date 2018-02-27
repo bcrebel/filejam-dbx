@@ -23,7 +23,7 @@ let upload = (body, files) => {
   function process() {
       files.canvasImage.forEach((image, idx, arr) => {
         doit(image, idx)
-        if(idx == arr.length) { 
+        if(idx === arr.length - 1) { 
           console.log('should be final')
           console.log(util.inspect(feed, { showHidden: true, depth: null }))
         }

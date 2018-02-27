@@ -115,12 +115,12 @@
             contentType: false,
             data: fd,
             timeout: 10000,
+            error: function(jqXHR, textStatus, errorThrown) {
+              console.log(errorThrown)
+            },
             success: function(data) {
               console.log(data); // 'OK'
             }
-          })
-          .fail(function (jqXHR, textStatus, errorThrown) {
-            console.log(errorThrown)
           })
         }
         
