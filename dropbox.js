@@ -19,8 +19,7 @@ let upload = (body, files) => {
   feed[body.brand] = {}
   feed[body.brand][body.project] = {"slides": []}
   
-  let fileNames = body.name.sort()
-  
+  console.log(body.videoLink)
   console.log('files')  
   console.log(files)
   // console.log(util.inspect(feed, { showHidden: true, depth: null }))
@@ -30,10 +29,10 @@ let upload = (body, files) => {
   })
   
   function doit(image, idx) {
-    let poster = files.canvasImage[idx].path;
+    let poster = image.path;
 
     fs.readFile(poster, (err, data) => {
-      send(data, idx)
+      send(data, image.originalname)
       .then((posterMetadata) => {
         // console.log(posterMetadata)
         // Add link to poster to feed
@@ -43,7 +42,7 @@ let upload = (body, files) => {
           // console.log(linkMetadata.url)
           let video = { video: {} }
           let poster = { poster: {} }
-          video['video'][video.originalname] = body.videoLink[idx]
+          video['video'][image.originalname] = body.videoLink[idx]
           poster['poster'][posterMetadata.name] = linkMetadata.url.replace('dl=0', 'dl=1')
           feed[body.brand][body.project]["slides"].push({})
           let slide = Object.assign({}, video, poster)
@@ -69,8 +68,8 @@ let upload = (body, files) => {
     })  
   }
   
-  function send(data, idx) {
-    return dbx.filesUpload({contents: data, path:`${pathToApp + body.brand}/${body.project}/${fileNames[idx].replace('mp4','jpg')}`, mode: 'overwrite'})
+  function send(data, name) {
+    return dbx.filesUpload({contents: data, path:`${pathToApp + body.brand}/${body.project}/${name.replace('mp4','jpg')}`, mode: 'overwrite'})
   }
   
   function createLink(path) {
