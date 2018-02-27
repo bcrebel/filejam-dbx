@@ -20,8 +20,9 @@ let upload = (body, files) => {
   feed[body.brand][body.project] = {"slides": []}
   
   let fileNames = body.name.sort()
-
   
+  console.log('files')  
+  console.log(files)
   // console.log(util.inspect(feed, { showHidden: true, depth: null }))
   
   files.canvasImage.forEach((image, idx) => {
@@ -53,9 +54,7 @@ let upload = (body, files) => {
           console.log(util.inspect(feed, { showHidden: true, depth: null }))
         })
         .catch((error) => {
-          if (error.status == 429) {
-           setTimeout(function() { return send(data, idx) }, 300000);
-          }
+          console.log(error)
         })
 
         // Add link to video to feed
@@ -63,7 +62,9 @@ let upload = (body, files) => {
         fs.unlinkSync(poster)
       })
       .catch((error) => {
-        console.log(error);
+        if (error.status == 429) {
+         setTimeout(function() { return send(data, idx) }, 300000);
+        }      
       })
     })  
   }

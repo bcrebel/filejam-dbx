@@ -131,7 +131,7 @@
               fd.set("brand", brand)
               fd.set("project", projectName);
               fd.append("name", video.name); 
-              fd.append("canvasImage", blob);
+              fd.append("canvasImage", blob, video.name);
               fd.append("videoLink", video.link); // You'll need to change this to be an index
               
               console.log('uploads')
