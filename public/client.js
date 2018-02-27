@@ -100,7 +100,7 @@
         
         // Declare values from selects here
         brand = $( "#brand" ).val();
-        projectName = $( "#projects" ).val();
+        projectName = $( "#projects" ).text();
         let fd = new FormData(document.forms[0]);
 
         function sendForm() {

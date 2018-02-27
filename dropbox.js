@@ -24,6 +24,9 @@ let upload = (body, files) => {
   files.canvasImage.forEach((image, idx) => {
     doit(image, idx)
   })
+  console.log('final')
+  console.log(util.inspect(feed, { showHidden: true, depth: null }))
+
   
   function doit(image, idx) {
     let poster = image.path;
