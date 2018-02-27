@@ -58,11 +58,7 @@ let upload = (body, files) => {
       // .catch((error) => {
       //   console.log(error)     
       // })
-      .catch((error) => {
-        if (error.status == 429) {
-          setTimeout(function() { return doit(image, idx) }, 300000);
-        }          
-      })
+      
     })  
   }
   
