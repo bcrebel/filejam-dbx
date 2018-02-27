@@ -35,9 +35,8 @@ let upload = (body, files) => {
     fs.readFile(poster, (err, data) => {
       send(data, image.originalname)
       .then((posterMetadata) => {
-
-
         createLink(posterMetadata.path_lower)
+
         .then((linkMetadata) => {
           let video = { video: {} }
           let poster = { poster: {} }
@@ -46,22 +45,23 @@ let upload = (body, files) => {
           feed[body.brand][body.project]["slides"].push({})
           let slide = Object.assign({}, video, poster)
 
-
+          
           feed[body.brand][body.project]["slides"][idx] = slide;
           console.log(util.inspect(feed, { showHidden: true, depth: null }))
         })
-        .catch((error) => {
-          if (error.status == 429) {
-           setTimeout(function() { return doit(image, idx) }, 300000);
-          }          
-        })
+
 
         // Add link to video to feed
         // Delete local file
         fs.unlinkSync(poster)
       })
+      // .catch((error) => {
+      //   console.log(error)     
+      // })
       .catch((error) => {
-        console.log(error)     
+        if (error.status == 429) {
+          setTimeout(function() { return doit(image, idx) }, 300000);
+        }          
       })
     })  
   }
