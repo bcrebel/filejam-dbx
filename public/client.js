@@ -31,7 +31,10 @@
       }
 
       function syncMe() {
+        
         function getVideoImage(path, secs) {
+          return new Promise((resolve, reject) => {
+
            var me = this, video = document.createElement('video');
             video.crossOrigin = 'Anonymous'; // Bump tainted canvases
             
@@ -45,7 +48,6 @@
             }
             
             video.onseeked = function(e) {
-              return new Promise((resolve, reject) => {
                 console.log('videoseeked')
                 let canvas = document.createElement('canvas');
                 canvas.height = video.videoHeight;
@@ -56,10 +58,12 @@
 
                 let img = new Image();
                 img.src = canvas.toDataURL('image/jpeg', 1.0);
-                console.log(img)
                 resolve(img)
-              })
             }
+            
+            video.src = path
+          })
+
         }
         
         
