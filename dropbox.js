@@ -54,11 +54,11 @@ let upload = (body, files) => {
           let slide = Object.assign({}, video, poster)
           console.log('video')
           console.log(video)
-
           feed[body.brand][body.project]["slides"][idx] = slide;
           
           console.log(util.inspect(feed, { showHidden: true, depth: null }))
-
+          
+          // fs.unlinkSync(poster)
 
         })
       }, (reason) => {
@@ -88,13 +88,13 @@ let upload = (body, files) => {
 //               _.remove(feed[body.brand][body.project]["slides"], _.isEmpty)
 
 //               console.log(util.inspect(feed, { showHidden: true, depth: null }))
-          //   }
-          // })
+//             }
+//           })
 
 
-//           // Add link to video to feed
-//           // Delete local file
-//           fs.unlinkSync(poster)
+          // Add link to video to feed
+          // Delete local file
+          // fs.unlinkSync(poster)
         // }
       // })
       .catch((error) => {
@@ -103,7 +103,6 @@ let upload = (body, files) => {
       
     }) 
     
-    fs.unlinkSync(poster)
   }
   
   function send(data, name) {
