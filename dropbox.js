@@ -38,7 +38,9 @@ let upload = (body, files) => {
         .then((posterMetadata) => {
         if(posterMetadata == undefined) { 
           return doit(image, idx) } 
-        else {
+        else if (posterMetadata) {
+          console.log('posterMetadata'  )
+          console.log(posterMetadata)
           createLink(posterMetadata.path_lower)
 
           .then((linkMetadata) => {
@@ -48,7 +50,8 @@ let upload = (body, files) => {
             poster['poster'][posterMetadata.name] = linkMetadata.url.replace('dl=0', 'dl=1')
             feed[body.brand][body.project]["slides"].push({})
             let slide = Object.assign({}, video, poster)
-
+            console.log('video')
+            console.log(video)
 
             feed[body.brand][body.project]["slides"][idx] = slide;
             console.log(util.inspect(feed, { showHidden: true, depth: null }))

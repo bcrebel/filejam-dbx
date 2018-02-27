@@ -111,8 +111,8 @@
             url : "/posters",
             type: "POST",
             cache: false,
-            processData: false,
-            contentType: false,
+            // processData: false,
+            // contentType: false,
             data: fd,
             success: function(data) {
               console.log(data); // 'OK'
