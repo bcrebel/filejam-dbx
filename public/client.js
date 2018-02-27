@@ -32,8 +32,7 @@
 
       function syncMe() {
         function getVideoImage(path, secs) {
-          console.log(path)
-          var me = this, video = document.createElement('video');
+           var me = this, video = document.createElement('video');
             video.crossOrigin = 'Anonymous'; // Bump tainted canvases
             
             video.onloadedmetadata = function() {
