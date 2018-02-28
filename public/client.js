@@ -1,163 +1,135 @@
-      let brands = []
-      let brand = '';
-      let projectName = '';
-      let fileName = '';
-      let videos = [];
-      let uploads = 0
-      
-      function dataURItoBlob(dataURI) {
-        return new Promise ((resolve, reject) => {
-          var byteString;
+ 
+let createPosters = {
+	
+	getVideoImage: function(path, secs) {
+		return new Promise((resolve, reject) => {
 
-          if (dataURI.split(',')[0].indexOf('base64') >= 0)
-            byteString = atob(dataURI.split(',')[1]);
-          else
-            byteString = unescape(dataURI.split(',')[1]);
+			var me = this, video = document.createElement('video');
+			video.crossOrigin = 'Anonymous'; // Bump tainted canvases
 
-          // separate out the mime component
-          var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+			video.onloadedmetadata = function() {
+				this.currentTime = secs;
+			}
 
-          // write the bytes of the string to a typed array
-          var ia = new Uint8Array(byteString.length);
-          for (var i = 0; i < byteString.length; i++) {
-              ia[i] = byteString.charCodeAt(i);
-          }
+			video.onseeked = function(e) {
 
-          uploads += 1
-          resolve( new Blob([ia], {type:mimeString}) )
-        })
-          // convert base64/URLEncoded data component to raw binary data held in a string
-          
-      }
+				let canvas = document.createElement('canvas');
+				canvas.height = video.videoHeight;
+				canvas.width = video.videoWidth;
 
-      function syncMe() {
-        console.log('sync')
-        function getVideoImage(path, secs) {
-          return new Promise((resolve, reject) => {
+				let ctx = canvas.getContext('2d');
+				ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-           var me = this, video = document.createElement('video');
-            video.crossOrigin = 'Anonymous'; // Bump tainted canvases
-            
-            video.onloadedmetadata = function() {
-              if ('function' === typeof secs) {
-                secs = secs(this.duration);
-              }
-            
-              this.currentTime = Math.min(Math.max(0, (secs < 0 ? this.duration : 0) + secs), this.duration);
-            }
-            
-            video.onseeked = function(e) {
-                let canvas = document.createElement('canvas');
-                canvas.height = video.videoHeight;
-                canvas.width = video.videoWidth;
+				let img = new Image();
+				img.src = canvas.toDataURL('image/jpeg', 1.0);	
+				resolve(img.src)
+			}
 
-                let ctx = canvas.getContext('2d');
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+			video.onerror = function(e) {
+	    	reject(video.error.message)
+	  	};
 
-                let img = new Image();
-                img.src = canvas.toDataURL('image/jpeg', 1.0);
-                resolve(img)
-                console.log(img)
-                console.log('img')
+			video.src = path
+		})
+	},
 
-            }
-            
-            video.src = path
-          })
+	convertToBlob: function(dataURI) {
+    // convert base64/URLEncoded data component to raw binary data held in a string
 
-        }
-        
-        // Declare values from selects here
-        brand = $( "#brand" ).val();
-        projectName = $( "#projects" ).val();
-        console.log(projectName)
-        
-        let fd = new FormData(document.forms[0]);
+		return new Promise ((resolve, reject) => {
+			var byteString;
 
-        function sendForm() {
-          console.log('shoulda sent')
-          return $.ajax({
-            url : "/posters",
-            type: "POST",
-            cache: false,
-            processData: false,
-            contentType: false,
-            data: fd,
-            timeout: 5000,
-            error: function(jqXHR, textStatus, errorThrown) {
-              console.log(errorThrown)
-              console.log(jqXHR)
-              console.log(textStatus)
-            },
-            success: function(data) {
-              console.log(data); // 'OK'
-            }
-          })
-        }
-        
-        videos.forEach((video, idx) => { 
-          fileName = video.name
+			if (dataURI.split(',')[0].indexOf('base64') >= 0) {
+				byteString = atob(dataURI.split(',')[1]);
+			} else {
+				byteString = unescape(dataURI.split(',')[1]);
+			}
 
-          getVideoImage(video.link, function() { return 0 })
-          .then((img) => {
-            dataURItoBlob(img.src)
-            .then((blob) => {
-              fd.set("brand", brand)
-              fd.set("project", projectName);
-              // fd.append("name", video.name); 
-              fd.append("canvasImage", blob, video.name);
-              fd.append("videoLink", video.link); // You'll need to change this to be an index
-              
+			// separate out the mime component
+			var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
 
-              if(uploads == videos.length) { return sendForm() } 
-            })
-            .catch((error) => { console.log(error)})
-          })
-        })
-      }
-                       
-      videoOptions = {
+			// write the bytes of the string to a typed array
+			var ia = new Uint8Array(byteString.length);
+			for (var i = 0; i < byteString.length; i++) {
+			  ia[i] = byteString.charCodeAt(i);
+			}
 
-        // Required. Called when a user selects an item in the Chooser.
-        success: function(files) {
-            files.forEach((file) => {
-              var node = document.createElement("li");                 
-              var textnode = document.createTextNode(`${file.name}`);
-              node.appendChild(textnode);                              
-              document.getElementById("video-list").appendChild(node); 
-              
-              videos = files
-            });
-          
-        },
+			resolve( new Blob([ia], {type:mimeString}) )
+		})
+	}
+}
 
-        // Optional. Called when the user closes the dialog without selecting a file
-        // and does not include any parameters.
-        cancel: function() {
+let sendPosters = {
+	addToForm: function(form, field, content, name = null) {
+		if (name) { 
+			form.append(field, content, name);
+		} else {
+			form.append(field, content);
+		}
+	},
+	
+	sendForm: function(form) {
+		console.log('shoulda sent')
+		return $.ajax({
+  		url : "/posters",
+			type: "POST",
+			cache: false,
+			processData: false,
+			contentType: false,
+			data: form,
+			timeout: 5000,
+			error: function(jqXHR, textStatus, errorThrown) {
+				console.log(errorThrown)
+				console.log(jqXHR)
+				console.log(textStatus)
+  		},
+			success: function(data) {
+				console.log(data); // 'OK'
+			}
+		})
+	}
+}
 
-        },
-        
-        linkType: "direct",
-        multiselect: true, 
-        extensions: ['.mp4'],
-        folderselect: false, // or true
-      };
-      
-      file = {
-       // Unique ID for the file, compatible with Dropbox API v2.
-        id: "id:...",
 
-        // Name of the file.
-        name: "filename.txt",
 
-        link: "https://...",
 
-        // Size of the file in bytes.
-        bytes: 464,
 
-        // URL to a 64x64px icon for the file based on the file's extension.
-        icon: "https://..."
-      };
-      var videoButton = Dropbox.createChooseButton(videoOptions);
-      document.getElementById("videos").appendChild(videoButton);
 
+function getCrackin() {
+	console.log('CRACKIN') // Delete
+
+	let brand = $( "#brand" ).val();
+	let projectName = $( "#projects" ).val();
+	let fd = new FormData(document.forms[0]);
+		fd.set("brand", brand)
+		fd.set("project", projectName);
+	
+
+	let posters = videos.map((video) => { 
+	 	return createPosters.getVideoImage(video.link, 0)
+	})
+
+	Promise.all(posters)
+	.then((posters) => {
+		let blobs = posters.map((blob) => {
+			return createPosters.convertToBlob(blob)
+		})
+
+		Promise.all(blobs)
+		.then((blobs) => {
+			console.log('blobs.length')
+			console.log(blobs.length)
+			blobs.forEach((blob, idx) => {
+				sendPosters.addToForm(fd, "canvasImage", blob, videos[idx].name)
+				console.log(videos[idx].link)
+				sendPosters.addToForm(fd, "link", videos[idx].link)
+			})
+
+			sendPosters.sendForm(fd)
+		})
+	})
+	.catch((error) => {
+		console.log(error)
+	})
+
+}
