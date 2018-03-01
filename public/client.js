@@ -78,11 +78,22 @@ let sendPosters = {
 			contentType: false,
 			data: form,
 			timeout: 5000,
+			retryLimit : 5,
 			error: function(jqXHR, textStatus, errorThrown) {
 				console.log(errorThrown)
 				console.log(jqXHR)
 				console.log(textStatus)
-  		},
+
+				if (textStatus == 'timeout') {
+					this.tryCount++;
+					if (this.tryCount <= this.retryLimit) {
+						//try again
+						$.ajax(this);
+						return;
+					}
+					return;
+				}
+			},
 			success: function(data) {
 				console.log(data); // 'OK'
 			}
@@ -121,7 +132,6 @@ function getCrackin() {
 			console.log(blobs.length)
 			blobs.forEach((blob, idx) => {
 				sendPosters.addToForm(fd, "canvasImage", blob, videos[idx].name)
-				console.log(videos[idx].link)
 				sendPosters.addToForm(fd, "link", videos[idx].link)
 			})
 
