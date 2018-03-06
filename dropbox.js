@@ -1,3 +1,4 @@
+// Next: TIMEOUT ON SERVER PROCESS, SEND TO CLIENT, THEN EXIT
 const util = require('util')
 
 require('isomorphic-fetch');
@@ -11,37 +12,51 @@ let _ = require('lodash');
 let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
 
 let targetFiles = []
-let uploads = [];
-let links = [];
 
 let populate = () => { 
   return brands
 }
 
 let upload = (body, files) => {
+	let uploads = [];
+	let links = [];
+
   let feed = {}
-  feed[body.brand] = {}
-  feed[body.brand][body.project] = {"slides": []}
+  feed[body.brand] = {};
+  feed[body.brand][body.project] = { "slides": [] };
+  feed[body.brand][body.project]["cover_card"] = body.coverCard;
 
-  console.log('!_.isArray(body.link')
-
-  console.log(!_.isArray(body.link))
   if(!_.isArray(body.link)) { 
-  	  	console.log(body.link)
 
   	let arr = []
   	arr.push(body.link)
   	body.link = arr
 	}
 
+	// console.log('BODY.LINK')
+	// console.log(body.link)
+
+	body.link = body.link.map((link, idx, acc) => {
+		let obj = {}
+		 obj["filename"] = link.slice(link.lastIndexOf("/") + 1)
+			obj["url"] = link
+		return obj
+	}, [])
+
+	body.link = _.sortBy(body.link, "filename");
+
+	// console.log('BODY.LINK')
+	// console.log(body.link)
+
   body.link.forEach((link, idx) => {
   	var slide = { "video": {} }
-		slide["video"][files.canvasImage[idx].originalname] = link
+		slide["video"][link.filename] = link.url;
 
   	feed[body.brand][body.project]["slides"][idx] = slide
   	feed[body.brand][body.project]["slides"][idx]["poster"] = {}
-		})
+	})
 
+	// console.log(util.inspect(feed, { showHidden: true, depth: null }))
 
   let api = {
 		read: function(file, link) {
@@ -52,7 +67,7 @@ let upload = (body, files) => {
 					record[file.originalname] = {};
 					record[file.originalname] = data;
 
-					fs.unlinkSync(file.path);
+					// fs.unlinkSync(file.path);
 					resolve(record);
 				})
 			})
@@ -68,11 +83,9 @@ let upload = (body, files) => {
 				if(uploads.length == length) {
 					// order them
 					uploads = _.sortBy(uploads, "name");
-					// console.log(uploads) 
 
 					uploads.forEach((upload, idx) => {
-						// feed[body.brand][body.project]["slides"][idx]["poster"] = {}
-						// feed[body.brand][body.project]["slides"][idx]["poster"][upload.name] = ""
+
 						api.createLink(upload.path_lower)
 						.then((link) => {
 							link.url = link.url.replace('dl=0', 'dl=1')
@@ -80,29 +93,43 @@ let upload = (body, files) => {
 							if(links.length == length) {
 								links = _.sortBy(links, "path")
 
+								// console.log('LINKS')
+								// console.log(links)
+								// console.log('UPLOADS')
+								// console.log(uploads)
+
 								links.forEach((link, idx) => {
 									feed[body.brand][body.project]["slides"][idx]["poster"][uploads[idx]["name"]] = link.url
-									console.log(uploads[idx])
-									console.log(link)
+									console.log(uploads[idx].name)
+									console.log(link.url)
 								})
-								// console.log(links)
+
+								files.canvasImage.forEach((file) => {
+									fs.unlinkSync(file.path)
+								})
+
 								console.log(util.inspect(feed, { showHidden: true, depth: null }))
+
 							}
+						})
+						.catch((error) => {
+							console.log(error)
 						})
 					})
 				}
 			})
 			.catch((error) => {
 				console.log(error.error)
-				setTimeout(function() { 
-					console.log('this')
-					return api.send(data, name, length) 
-				}, 6000);
+				if(error.status == 429) {  return api.send(data, name, length) }
 			})
 		},
 
 		createLink: function(path) {
 			return dbx.sharingCreateSharedLink({path: path})
+			.catch((error) => {
+				console.log(error.error)
+				if(error) { setTimeout(function() { return api.createLink(path) }, 3000 ) }
+			})
 		}
   }
 
@@ -127,9 +154,6 @@ let upload = (body, files) => {
 		})
 	}
 
-	// console.log(body)
- //  console.log('length of files')
- //  console.log(files.canvasImage.length)
   doit()
 }
 

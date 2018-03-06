@@ -27,6 +27,7 @@ app.get("/", function (request, response) {
 
 app.post("/posters", load.fields([{ name: 'brand' }, { name: 'project' }, { name: 'canvasImage' } ]), function (request, response) {
   upload(request.body, request.files)
+  console.log(request.body)
   response.sendStatus(200);
 });
 

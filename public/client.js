@@ -8,10 +8,12 @@ let createPosters = {
 			video.crossOrigin = 'Anonymous'; // Bump tainted canvases
 
 			video.onloadedmetadata = function() {
+				console.log('metadata loaded')
 				this.currentTime = secs;
 			}
 
 			video.onseeked = function(e) {
+				console.log('video seeked')
 
 				let canvas = document.createElement('canvas');
 				canvas.height = video.videoHeight;
@@ -35,7 +37,7 @@ let createPosters = {
 
 	convertToBlob: function(dataURI) {
     // convert base64/URLEncoded data component to raw binary data held in a string
-
+    console.log('converting to blob')
 		return new Promise ((resolve, reject) => {
 			var byteString;
 
@@ -114,7 +116,10 @@ function getCrackin() {
 	let fd = new FormData(document.forms[0]);
 		fd.set("brand", brand)
 		fd.set("project", projectName);
-	
+
+	let coverCards = covers.forEach((cover) => {
+		sendPosters.addToForm(fd, "coverCard", cover.link)
+	})
 
 	let posters = videos.map((video) => { 
 	 	return createPosters.getVideoImage(video.link, 0)
