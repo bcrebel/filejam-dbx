@@ -85,3 +85,8 @@ footer > a {
 .nicejob {
 	text-decoration: line-through;
 }
+
+.disabled {
+	pointer-events: none;
+	opacity: 0.75;
+}

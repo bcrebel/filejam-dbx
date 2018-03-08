@@ -11,7 +11,6 @@ let _ = require('lodash');
 
 let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
 
-let targetFiles = []
 
 let populate = () => { 
   return brands

@@ -5,17 +5,12 @@ videoOptions = {
 		files.forEach((file) => {
 			var node = document.createElement("li");                 
 			var textnode = document.createTextNode(`${file.name}`);
-			node.appendChild(textnode);                              
+			node.appendChild(textnode);   
+			validation.toggleDisabledAttr($("button"))                      
 			document.getElementById("video-list").appendChild(node); 
 
 		videos = files
 		});
-	},
-
-	// Optional. Called when the user closes the dialog without selecting a file
-	// and does not include any parameters.
-	cancel: function() {
-
 	},
 
 	linkType: "direct",
@@ -31,43 +26,28 @@ coverOptions = {
 		files.forEach((file) => {
 			var node = document.createElement("li");                 
 			var textnode = document.createTextNode(`${file.name}`);
-			node.appendChild(textnode);                              
+			node.appendChild(textnode);    
+			validation.toggleDisabledClass($(videoButton))     
 			document.getElementById("cover-list").appendChild(node); 
 
 		covers = files
 		});
 	},
-
-	// Optional. Called when the user closes the dialog without selecting a file
-	// and does not include any parameters.
-	cancel: function() {
-
-	},
-
 	linkType: "direct",
 	multiselect: false, 
-	extensions: ['.jpg'],
-	folderselect: false, // or true
+	extensions: ['.jpg', '.png'],
+	folderselect: false
 };
 
 file = {
-	// Unique ID for the file, compatible with Dropbox API v2.
-	id: "id:...",
-
-	// Name of the file.
 	name: "filename.txt",
-
-	link: "https://...",
-
-	// Size of the file in bytes.
-	bytes: 464,
-
-	// URL to a 64x64px icon for the file based on the file's extension.
-	icon: "https://..."
+	link: "https://..."
 };
 
 var coverButton = Dropbox.createChooseButton(coverOptions);
 document.getElementById("cover").appendChild(coverButton);
+$( coverButton ).addClass("disabled")
 
 var videoButton = Dropbox.createChooseButton(videoOptions);
 document.getElementById("videos").appendChild(videoButton);
+$( videoButton ).addClass("disabled")

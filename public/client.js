@@ -62,6 +62,7 @@ let createPosters = {
 }
 
 let sendPosters = {
+	
 	addToForm: function(form, field, content, name = null) {
 		if (name) { 
 			form.append(field, content, name);
@@ -71,7 +72,8 @@ let sendPosters = {
 	},
 	
 	sendForm: function(form) {
-		console.log('shoulda sent')
+		console.log('sending blobs')
+		
 		return $.ajax({
   		url : "/posters",
 			type: "POST",
@@ -96,6 +98,7 @@ let sendPosters = {
 					return;
 				}
 			},
+			
 			success: function(data) {
 				console.log(data); // 'OK'
 			}
@@ -103,13 +106,41 @@ let sendPosters = {
 	}
 }
 
+let validation = {
+
+	toggleDisabledAttr: function(element) {
+		element.removeAttr('disabled')
+	},
+ 	
+ 	toggleDisabledClass: function(element) {
+		element.removeClass('disabled')
+	},
+
+	hasBrand: function() {
+		let brand = $( "#brand" );
+		brand.change(function() {
+			if (brand.val() != '') {
+				validation.toggleDisabledAttr($('#projects'))
+			} 
+		});
+	},
+
+	hasProject: function() {
+		let project = $( "#projects" );
+		project.keypress(function() {
+			if( project.val() != '') {
+				validation.toggleDisabledClass($(coverButton))
+			}
+		})
+	}
+}
+
+validation.hasBrand()
+validation.hasProject()
 
 
 
-
-
-function getCrackin() {
-	console.log('CRACKIN') // Delete
+function process() {
 
 	let brand = $( "#brand" ).val();
 	let projectName = $( "#projects" ).val();
@@ -146,5 +177,4 @@ function getCrackin() {
 	.catch((error) => {
 		console.log(error)
 	})
-
 }
