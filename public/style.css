@@ -36,6 +36,10 @@ form {
 	border-radius: 3px;
 }
 
+select {
+	font-size: 16px;
+}
+
 label {
 	display: block;
 	margin: 20px 0 10px;
@@ -70,6 +74,12 @@ button:active {
 
 li {
 	margin-bottom: 5px;
+	list-style: none;
+}
+
+#video-list li {
+	display: inline-block;
+	margin: 20px 20px 0 0;
 }
 
 footer {

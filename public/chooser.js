@@ -2,14 +2,16 @@ videoOptions = {
 
 // Required. Called when a user selects an item in the Chooser.
 	success: function(files) {
-		files.forEach((file) => {
-			var node = document.createElement("li");                 
-			var textnode = document.createTextNode(`${file.name}`);
-			node.appendChild(textnode);   
-			validation.toggleDisabledAttr($("button"))                      
-			document.getElementById("video-list").appendChild(node); 
+		let videoList = $("#video-list");
+		videoList.empty();
 
-		videos = files
+		files.forEach((file) => {
+			videoList
+			.append(`<li><p>${file.name}</p><div style="background-image: url('${file.thumbnailLink}'); 
+				background-size: contain; background-color: black; width: 42px; height: 75px;"></div></li>`);
+			
+			validation.toggleDisabledAttr($("button"));    
+			videos = files
 		});
 	},
 
@@ -23,14 +25,16 @@ coverOptions = {
 
 // Required. Called when a user selects an item in the Chooser.
 	success: function(files) {
-		files.forEach((file) => {
-			var node = document.createElement("li");                 
-			var textnode = document.createTextNode(`${file.name}`);
-			node.appendChild(textnode);    
-			validation.toggleDisabledClass($(videoButton))     
-			document.getElementById("cover-list").appendChild(node); 
+		let coverList = $("#cover-list")
+		coverList.empty()
 
-		covers = files
+		files.forEach((file) => {
+			coverList
+			.append(`<li><p>${file.name}</p><div style="background-image: url('${file.link}');
+				background-size: contain; width: 87px; height: 116px;"></div></li>`);  
+			validation.toggleDisabledClass($(videoButton));    
+
+			covers = files
 		});
 	},
 	linkType: "direct",
@@ -41,13 +45,14 @@ coverOptions = {
 
 file = {
 	name: "filename.txt",
-	link: "https://..."
+	link: "https://...",
+	thumbnailLink: "https://...?bounding_box=75&mode=fit"
 };
 
 var coverButton = Dropbox.createChooseButton(coverOptions);
 document.getElementById("cover").appendChild(coverButton);
-$( coverButton ).addClass("disabled")
+$(coverButton).addClass("disabled")
 
 var videoButton = Dropbox.createChooseButton(videoOptions);
 document.getElementById("videos").appendChild(videoButton);
-$( videoButton ).addClass("disabled")
+$(videoButton).addClass("disabled")

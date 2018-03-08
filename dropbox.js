@@ -19,8 +19,8 @@ let populate = () => {
 let upload = (body, files) => {
 	let uploads = [];
 	let links = [];
-
   let feed = {}
+
   feed[body.brand] = {};
   feed[body.brand][body.project] = { "slides": [] };
   feed[body.brand][body.project]["cover_card"] = body.coverCard;
@@ -32,20 +32,15 @@ let upload = (body, files) => {
   	body.link = arr
 	}
 
-	// console.log('BODY.LINK')
-	// console.log(body.link)
 
 	body.link = body.link.map((link, idx, acc) => {
-		let obj = {}
+		let obj = {};
 		 obj["filename"] = link.slice(link.lastIndexOf("/") + 1)
 			obj["url"] = link
 		return obj
 	}, [])
 
 	body.link = _.sortBy(body.link, "filename");
-
-	// console.log('BODY.LINK')
-	// console.log(body.link)
 
   body.link.forEach((link, idx) => {
   	var slide = { "video": {} }
@@ -55,18 +50,14 @@ let upload = (body, files) => {
   	feed[body.brand][body.project]["slides"][idx]["poster"] = {}
 	})
 
-	// console.log(util.inspect(feed, { showHidden: true, depth: null }))
-
   let api = {
 		read: function(file, link) {
 			return new Promise((resolve, reject) => {
 				fs.readFile(file.path, (error, data)  => {
 					if(error) reject(error)
-					let record = {}
+					let record = {};
 					record[file.originalname] = {};
 					record[file.originalname] = data;
-
-					// fs.unlinkSync(file.path);
 					resolve(record);
 				})
 			})
@@ -90,12 +81,7 @@ let upload = (body, files) => {
 							link.url = link.url.replace('dl=0', 'dl=1')
 							links.push(link)
 							if(links.length == length) {
-								links = _.sortBy(links, "path")
-
-								// console.log('LINKS')
-								// console.log(links)
-								// console.log('UPLOADS')
-								// console.log(uploads)
+								links = _.sortBy(links, "path");
 
 								links.forEach((link, idx) => {
 									feed[body.brand][body.project]["slides"][idx]["poster"][uploads[idx]["name"]] = link.url

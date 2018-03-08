@@ -73,7 +73,7 @@ let sendPosters = {
 	
 	sendForm: function(form) {
 		console.log('sending blobs')
-		
+
 		return $.ajax({
   		url : "/posters",
 			type: "POST",
@@ -127,7 +127,7 @@ let validation = {
 
 	hasProject: function() {
 		let project = $( "#projects" );
-		project.keypress(function() {
+		project.change(function() {
 			if( project.val() != '') {
 				validation.toggleDisabledClass($(coverButton))
 			}
