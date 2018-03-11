@@ -61,7 +61,6 @@ let createPosters = {
 	}
 }
 
-// sendPosters.checkStatus();
 
 
 let sendPosters = {
@@ -113,11 +112,12 @@ let sendPosters = {
 		let start = 0;
 		let startTime = Date.now();
 				
-		let feedInt = setInterval(visitFeed, 1000)
+		let feedInt = setInterval(visitFeed, 5000)
 
 		function visitFeed() {
-					console.log('start is')
-
+			console.log('start is')
+			console.log(start)
+			
 			start++;
 			$.get( "/session",  { "time": startTime }, (data) => {
 				console.log(data)

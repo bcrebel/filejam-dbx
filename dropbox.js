@@ -6,6 +6,7 @@ const Dropbox = require('dropbox').Dropbox;
 const fs = require('fs');
 const jsonFormat = require('json-format');
 const StringDecoder = require('string_decoder').StringDecoder;
+const sortedObject = require("sorted-object");
 
 let pathToApp = '/Apps/filejam/';
 let brands = ["Cosmopolitan", "Elle", "Esquire", "Harpers Bazaar"];
@@ -40,15 +41,23 @@ let upload = (body, files) => {
   	body.link = arr
 	}
 
+	console.log('body.link original')
+	console.log(body.link)
+
 
 	body.link = body.link.map((link, idx, acc) => {
 		let obj = {};
-		 obj["filename"] = link.slice(link.lastIndexOf("/") + 1)
+		 obj["filename"] = decodeURIComponent(link.slice(link.lastIndexOf("/") + 1))
+		 console.log('link')
+		 console.log(link)
 			obj["url"] = link
 		return obj
 	}, [])
 
-	body.link = _.sortBy(body.link, "filename");
+	body.link = _.sortBy(body.link, ["filename"]);
+
+console.log('new body link')
+console.log(body.link)
 
   body.link.forEach((link, idx) => {
   	var slide = { "video": {} }
@@ -57,6 +66,7 @@ let upload = (body, files) => {
   	feed[body.brand][body.project]["slides"][idx] = slide
   	feed[body.brand][body.project]["slides"][idx]["poster"] = {}
 	})
+
 
   let api = {
 		read: function(file, link) {
@@ -134,13 +144,14 @@ let upload = (body, files) => {
 
 					let decoder = new StringDecoder('utf8');
 					let oldFeed = JSON.parse(decoder.write(data));
-					console.log('later feed')
-					console.log(feed)
-					console.log(oldFeed)
-					feed = _.assign({}, oldFeed, feed);
 
-					write.file(jsonFormat(feed));
-					console.log('done')
+					if(oldFeed[brand] != undefined && oldFeed[brand][project] != undefined) {
+						oldFeed[brand][project] = feed[brand][project] // Overwrite older value of project
+					} else {
+						oldFeed = _.merge(oldFeed, feed)
+					}
+					
+					write.file(jsonFormat(oldFeed));
 				});
 			} else {
 				write.file(jsonFormat(feed));
@@ -193,6 +204,7 @@ let uploaded = () => {
 	let slides = feed[brand][project]["slides"].map((slide) => {
 		return _.keys(slide.video)[0]
 	})
+
 
 	return { slides }
 }
