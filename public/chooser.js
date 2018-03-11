@@ -18,7 +18,7 @@ videoOptions = {
 	linkType: "direct",
 	multiselect: true, 
 	extensions: ['.mp4'],
-	folderselect: false, // or true
+	folderselect: false
 };
 
 coverOptions = {

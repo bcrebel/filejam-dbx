@@ -3,27 +3,35 @@ const util = require('util')
 
 require('isomorphic-fetch');
 const Dropbox = require('dropbox').Dropbox;
-let pathToApp = '/Apps/filejam/'
-let fs = require('fs')
-const FileSync = require('lowdb/adapters/FileSync')
-let brands = ["Cosmopolitan", "Elle", "Esquire", "Harpers Bazaar"]
+const fs = require('fs');
+const jsonFormat = require('json-format');
+const StringDecoder = require('string_decoder').StringDecoder;
+
+let pathToApp = '/Apps/filejam/';
+let brands = ["Cosmopolitan", "Elle", "Esquire", "Harpers Bazaar"];
 let _ = require('lodash');
 
 let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
 
-
 let populate = () => { 
   return brands
 }
+ 
+let feed, brand, project;
+
 
 let upload = (body, files) => {
+	console.log('initial feed')
+	console.log(feed)
 	let uploads = [];
 	let links = [];
-  let feed = {}
+	feed = {};
+	brand = body.brand;
+	project = body.project;
 
-  feed[body.brand] = {};
-  feed[body.brand][body.project] = { "slides": [] };
-  feed[body.brand][body.project]["cover_card"] = body.coverCard;
+  feed[brand] = {};
+  feed[brand][project] = { "slides": [] };
+  feed[brand][project]["cover_card"] = body.coverCard;
 
   if(!_.isArray(body.link)) { 
 
@@ -70,7 +78,9 @@ let upload = (body, files) => {
 				let path = metadata.path_lower;
 
 				uploads.push(metadata)
+
 				if(uploads.length == length) {
+					
 					// order them
 					uploads = _.sortBy(uploads, "name");
 
@@ -84,17 +94,15 @@ let upload = (body, files) => {
 								links = _.sortBy(links, "path");
 
 								links.forEach((link, idx) => {
-									feed[body.brand][body.project]["slides"][idx]["poster"][uploads[idx]["name"]] = link.url
-									console.log(uploads[idx].name)
-									console.log(link.url)
+									feed[body.brand][body.project]["slides"][idx]["poster"][uploads[idx]["name"]] = link.url;
 								})
 
 								files.canvasImage.forEach((file) => {
 									fs.unlinkSync(file.path)
 								})
 
-								console.log(util.inspect(feed, { showHidden: true, depth: null }))
-
+								write.feed();
+								// console.log(util.inspect(feed, { showHidden: true, depth: null }))
 							}
 						})
 						.catch((error) => {
@@ -114,6 +122,35 @@ let upload = (body, files) => {
 			.catch((error) => {
 				console.log(error.error)
 				if(error) { setTimeout(function() { return api.createLink(path) }, 3000 ) }
+			})
+		}
+  }
+
+  let write = {
+		feed: function() {
+			if(fs.existsSync("feed.json")) {
+				fs.readFile("feed.json", (error, data) => {
+					if(error) reject(error);
+
+					let decoder = new StringDecoder('utf8');
+					let oldFeed = JSON.parse(decoder.write(data));
+					console.log('later feed')
+					console.log(feed)
+					console.log(oldFeed)
+					feed = _.assign({}, oldFeed, feed);
+
+					write.file(jsonFormat(feed));
+					console.log('done')
+				});
+			} else {
+				write.file(jsonFormat(feed));
+			}
+		},
+
+		file: function(data) {
+			fs.writeFileSync("feed.json", data, (error) => {
+				if(error) throw error;
+				console.log("Feed has been saved");
 			})
 		}
   }
@@ -142,4 +179,23 @@ let upload = (body, files) => {
   doit()
 }
 
-module.exports = { upload, populate }
+let check = () => {
+
+	if(fs.existsSync("feed.json")) {
+		return fs.statSync('feed.json')
+	} else {
+		return false;
+	}
+}
+
+let uploaded = () => {
+
+	let slides = feed[brand][project]["slides"].map((slide) => {
+		return _.keys(slide.video)[0]
+	})
+
+	return { slides }
+}
+
+
+module.exports = { upload, populate, check, uploaded }

@@ -6,7 +6,7 @@ require('dotenv').load();
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-let { upload, populate }  = require('./dropbox.js')
+let { upload, populate, check, uploaded }  = require('./dropbox.js')
 
 app.set('view engine', 'pug')
 
@@ -20,16 +20,33 @@ app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function (request, response) {
-  let brands = populate()
-  response.render('index', { brands: brands })
-
+  let brands = populate();
+	response.render('index', { brands: brands })
 });
 
-app.post("/posters", load.fields([{ name: 'brand' }, { name: 'project' }, { name: 'canvasImage' } ]), function (request, response) {
-  upload(request.body, request.files)
-  console.log(request.body)
-  response.sendStatus(200);
+app.post('/posters', load.fields([{ name: 'brand' }, { name: 'project' }, { name: 'canvasImage' } ]), function (request, response) {
+	response.sendStatus(200);
+	upload(request.body, request.files)
 });
+
+
+app.get('/session', function(request, response) {
+
+	if(check() != false) {
+		let stats = check()
+
+		if(stats.mtimeMs > request.query.time) {
+			response.send("feed updated")
+		}
+	} else {
+		response.send("feed processing")
+	}
+})
+
+app.get('/success', function(request, response) {
+	let files = uploaded();
+	response.render('success', { files: files })
+})
 
 // listen for requests :)
 var listener = app.listen(8000, function () {

@@ -61,6 +61,9 @@ let createPosters = {
 	}
 }
 
+// sendPosters.checkStatus();
+
+
 let sendPosters = {
 	
 	addToForm: function(form, field, content, name = null) {
@@ -103,6 +106,51 @@ let sendPosters = {
 				console.log(data); // 'OK'
 			}
 		})
+	},
+
+	checkStatus: function() {
+		let limit = 12;
+		let start = 0;
+		let startTime = Date.now();
+				
+		let feedInt = setInterval(visitFeed, 1000)
+
+		function visitFeed() {
+					console.log('start is')
+
+			start++;
+			$.get( "/session",  { "time": startTime }, (data) => {
+				console.log(data)
+
+				if(data === "feed updated") {
+					location.href = "success";
+					clearInterval(feedInt)
+
+				}
+			});
+
+			if(start === limit) {
+				console.log('here')
+				$("#overlay p").remove()
+				$("#overlay").append("<p class='sorry'>Something went wrong</p>")
+
+				$("#overlay").append("<div class='error-buttons'><button id='back'>Try Again</button><button id='cancel'>cancel</button></div>")
+
+				$( "#back" ).click(function() {
+				  $("#overlay").remove()
+				  process()
+				});
+
+				$("#cancel").click(function() {
+					location.reload()
+				});
+
+				console.log('try again')
+				clearInterval(feedInt)
+
+			}
+		}
+
 	}
 }
 
@@ -116,31 +164,25 @@ let validation = {
 		element.removeClass('disabled')
 	},
 
-	hasBrand: function() {
-		let brand = $( "#brand" );
-		brand.change(function() {
-			if (brand.val() != '') {
-				validation.toggleDisabledAttr($('#projects'))
-			} 
-		});
+	hasBrand: function(brand) {
+		if (brand.val() != '') {
+			validation.toggleDisabledAttr($('#projects'))
+		} 
 	},
 
-	hasProject: function() {
-		let project = $( "#projects" );
-		project.change(function() {
-			if( project.val() != '') {
-				validation.toggleDisabledClass($(coverButton))
-			}
-		})
+	hasProject: function(project) {
+		if( project.val() != '') {
+			validation.toggleDisabledClass($(coverButton))
+		}
 	}
 }
-
-validation.hasBrand()
-validation.hasProject()
 
 
 
 function process() {
+
+	$("body").append("<div id='overlay'><p>Processing...</p></div>")
+	sendPosters.checkStatus();
 
 	let brand = $( "#brand" ).val();
 	let projectName = $( "#projects" ).val();
@@ -164,8 +206,6 @@ function process() {
 
 		Promise.all(blobs)
 		.then((blobs) => {
-			console.log('blobs.length')
-			console.log(blobs.length)
 			blobs.forEach((blob, idx) => {
 				sendPosters.addToForm(fd, "canvasImage", blob, videos[idx].name)
 				sendPosters.addToForm(fd, "link", videos[idx].link)
