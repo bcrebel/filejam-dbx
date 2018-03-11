@@ -6,7 +6,7 @@ const Dropbox = require('dropbox').Dropbox;
 const fs = require('fs');
 const jsonFormat = require('json-format');
 const StringDecoder = require('string_decoder').StringDecoder;
-const sortedObject = require("sorted-object");
+const byKey = require('natural-sort-by-key');
 
 let pathToApp = '/Apps/filejam/';
 let brands = ["Cosmopolitan", "Elle", "Esquire", "Harpers Bazaar"];
@@ -54,7 +54,7 @@ let upload = (body, files) => {
 		return obj
 	}, [])
 
-	body.link = _.sortBy(body.link, ["filename"]);
+	body.link = body.link.sort(byKey("filename"))
 
 console.log('new body link')
 console.log(body.link)
@@ -92,7 +92,7 @@ console.log(body.link)
 				if(uploads.length == length) {
 					
 					// order them
-					uploads = _.sortBy(uploads, "name");
+					uploads = uploads.sort(byKey("name"));
 
 					uploads.forEach((upload, idx) => {
 
@@ -101,7 +101,7 @@ console.log(body.link)
 							link.url = link.url.replace('dl=0', 'dl=1')
 							links.push(link)
 							if(links.length == length) {
-								links = _.sortBy(links, "path");
+								links = links.sort(byKey("path"));
 
 								links.forEach((link, idx) => {
 									feed[body.brand][body.project]["slides"][idx]["poster"][uploads[idx]["name"]] = link.url;
