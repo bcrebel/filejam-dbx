@@ -22,8 +22,7 @@ let feed, brand, project;
 
 
 let upload = (body, files) => {
-	console.log('initial feed')
-	console.log(feed)
+	console.log(files)
 	let uploads = [];
 	let links = [];
 	feed = {};
@@ -40,11 +39,7 @@ let upload = (body, files) => {
   	arr.push(body.link)
   	body.link = arr
 	}
-
-	console.log('body.link original')
-	console.log(body.link)
-
-
+	
 	body.link = body.link.map((link, idx, acc) => {
 		let obj = {};
 		 obj["filename"] = decodeURIComponent(link.slice(link.lastIndexOf("/") + 1))
@@ -55,9 +50,6 @@ let upload = (body, files) => {
 	}, [])
 
 	body.link = body.link.sort(byKey("filename"))
-
-console.log('new body link')
-console.log(body.link)
 
   body.link.forEach((link, idx) => {
   	var slide = { "video": {} }
@@ -200,13 +192,14 @@ let check = () => {
 }
 
 let uploaded = () => {
+ 
 
 	let slides = feed[brand][project]["slides"].map((slide) => {
 		return _.keys(slide.video)[0]
 	})
 
 
-	return { slides }
+	return { brand, project, slides }
 }
 
 

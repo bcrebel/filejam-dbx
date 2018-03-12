@@ -113,11 +113,17 @@ footer > a {
 	margin-right: 30px;
 }
 
-#back {
-	margin-right: 10px;
-}
-
 .disabled {
 	pointer-events: none;
 	opacity: 0.75;
+}
+
+.blinking {
+  animation: blinker 1.5s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
 }

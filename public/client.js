@@ -117,7 +117,7 @@ let sendPosters = {
 		function visitFeed() {
 			console.log('start is')
 			console.log(start)
-			
+
 			start++;
 			$.get( "/session",  { "time": startTime }, (data) => {
 				console.log(data)
@@ -134,7 +134,7 @@ let sendPosters = {
 				$("#overlay p").remove()
 				$("#overlay").append("<p class='sorry'>Something went wrong</p>")
 
-				$("#overlay").append("<div class='error-buttons'><button id='back'>Try Again</button><button id='cancel'>cancel</button></div>")
+				$("#overlay").append("<div class='error-buttons'><button id='cancel'>cancel</button></div>")
 
 				$( "#back" ).click(function() {
 				  $("#overlay").remove()
@@ -181,7 +181,7 @@ let validation = {
 
 function process() {
 
-	$("body").append("<div id='overlay'><p>Processing...</p></div>")
+	$("body").append("<div id='overlay'><p class='blinking'>Processing...</p></div>")
 	sendPosters.checkStatus();
 
 	let brand = $( "#brand" ).val();
