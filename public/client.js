@@ -61,8 +61,6 @@ let createPosters = {
 	}
 }
 
-
-
 let sendPosters = {
 	
 	addToForm: function(form, field, content, name = null) {
@@ -108,16 +106,14 @@ let sendPosters = {
 	},
 
 	checkStatus: function() {
-		let limit = 12;
+		let limit = 18;
 		let start = 0;
 		let startTime = Date.now();
 				
 		let feedInt = setInterval(visitFeed, 5000)
 
 		function visitFeed() {
-			console.log('start is')
-			console.log(start)
-
+			console.log('Attempt ' + start)
 			start++;
 			$.get( "/session",  { "time": startTime }, (data) => {
 				console.log(data)
@@ -125,7 +121,6 @@ let sendPosters = {
 				if(data === "feed updated") {
 					location.href = "success";
 					clearInterval(feedInt)
-
 				}
 			});
 
@@ -160,61 +155,64 @@ let validation = {
 		element.removeAttr('disabled')
 	},
  	
- 	toggleDisabledClass: function(element) {
-		element.removeClass('disabled')
-	},
+ // 	toggleDisabledClass: function(element) {
+	// 	element.removeClass('disabled')
+	// },
 
 	hasBrand: function(brand) {
-		if (brand.val() != '') {
-			validation.toggleDisabledAttr($('#projects'))
-		} 
+		return brand.val() != undefined ? true : false;
 	},
 
 	hasProject: function(project) {
-		if( project.val() != '') {
-			validation.toggleDisabledClass($(coverButton))
-		}
+		return project.val() != undefined ?  true : false;
+	},
+
+	hasAll: function() {
+		return validation.hasBrand($("#brand")) && validation.hasProject($("#projects")) ? true : false;
 	}
 }
 
 
 
 function process() {
+	if(validation.hasAll() && covers != undefined && videos != undefined) {
+		console.log(covers)
+		console.log(videos)
+		$("body").append("<div id='overlay'><p class='blinking'>Processing...</p></div>")
+		sendPosters.checkStatus();
 
-	$("body").append("<div id='overlay'><p class='blinking'>Processing...</p></div>")
-	sendPosters.checkStatus();
+		let brand = $( "#brand" ).val();
+		let projectName = $( "#projects" ).val();
+		let fd = new FormData(document.forms[0]);
+			fd.set("brand", brand)
+			fd.set("project", projectName);
 
-	let brand = $( "#brand" ).val();
-	let projectName = $( "#projects" ).val();
-	let fd = new FormData(document.forms[0]);
-		fd.set("brand", brand)
-		fd.set("project", projectName);
-
-	let coverCards = covers.forEach((cover) => {
-		sendPosters.addToForm(fd, "coverCard", cover.link)
-	})
-
-	let posters = videos.map((video) => { 
-	 	return createPosters.getVideoImage(video.link, 0)
-	})
-
-	Promise.all(posters)
-	.then((posters) => {
-		let blobs = posters.map((blob) => {
-			return createPosters.convertToBlob(blob)
+		let coverCards = covers.forEach((cover) => {
+			sendPosters.addToForm(fd, "coverCard", cover.link)
 		})
 
-		Promise.all(blobs)
-		.then((blobs) => {
-			blobs.forEach((blob, idx) => {
-				sendPosters.addToForm(fd, "canvasImage", blob, videos[idx].name)
-				sendPosters.addToForm(fd, "link", videos[idx].link)
+		let posters = videos.map((video) => { 
+		 	return createPosters.getVideoImage(video.link, 0)
+		})
+
+		Promise.all(posters)
+		.then((posters) => {
+			let blobs = posters.map((blob) => {
+				return createPosters.convertToBlob(blob)
 			})
 
-			sendPosters.sendForm(fd)
+			Promise.all(blobs)
+			.then((blobs) => {
+				blobs.forEach((blob, idx) => {
+					sendPosters.addToForm(fd, "canvasImage", blob, videos[idx].name)
+					sendPosters.addToForm(fd, "link", videos[idx].link)
+				})
+
+				sendPosters.sendForm(fd)
+			})
 		})
-	})
-	.catch((error) => {
-		console.log(error)
-	})
+		.catch((error) => {
+			console.log(error)
+		})
+	}
 }

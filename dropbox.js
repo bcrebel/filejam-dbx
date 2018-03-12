@@ -20,7 +20,6 @@ let populate = () => {
  
 let feed, brand, project;
 
-
 let upload = (body, files) => {
 	console.log(files)
 	let uploads = [];
@@ -39,7 +38,7 @@ let upload = (body, files) => {
   	arr.push(body.link)
   	body.link = arr
 	}
-	
+
 	body.link = body.link.map((link, idx, acc) => {
 		let obj = {};
 		 obj["filename"] = decodeURIComponent(link.slice(link.lastIndexOf("/") + 1))

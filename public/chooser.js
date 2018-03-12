@@ -1,3 +1,5 @@
+let videos, covers;
+
 videoOptions = {
 
 // Required. Called when a user selects an item in the Chooser.
@@ -10,8 +12,9 @@ videoOptions = {
 			.append(`<li><p>${file.name}</p><div style="background-image: url('${file.thumbnailLink}'); 
 				background-size: contain; background-color: black; width: 42px; height: 75px;"></div></li>`);
 			
-			validation.toggleDisabledAttr($("button"));    
-			videos = files
+			videos = files;
+
+			if(validation.hasAll() && covers != undefined) validation.toggleDisabledAttr($("button"));
 		});
 	},
 
@@ -32,9 +35,11 @@ coverOptions = {
 			coverList
 			.append(`<li><p>${file.name}</p><div style="background-image: url('${file.link}');
 				background-size: contain; width: 87px; height: 116px;"></div></li>`);  
-			validation.toggleDisabledClass($(videoButton));    
 
 			covers = files
+
+			if(validation.hasAll() && videos != undefined) validation.toggleDisabledAttr($("button"));
+
 		});
 	},
 	linkType: "direct",
@@ -51,8 +56,8 @@ file = {
 
 var coverButton = Dropbox.createChooseButton(coverOptions);
 document.getElementById("cover").appendChild(coverButton);
-$(coverButton).addClass("disabled")
+// $(coverButton).addClass("disabled")
 
 var videoButton = Dropbox.createChooseButton(videoOptions);
 document.getElementById("videos").appendChild(videoButton);
-$(videoButton).addClass("disabled")
+// $(videoButton).addClass("disabled")
