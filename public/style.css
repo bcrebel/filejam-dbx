@@ -75,6 +75,10 @@ li {
 	list-style: none;
 }
 
+li div {
+	background-color: gray;
+}
+
 #video-list li {
 	display: inline-block;
 	margin: 20px 20px 0 0;
@@ -113,9 +117,12 @@ footer > a {
 	margin-right: 30px;
 }
 
-.disabled {
-	pointer-events: none;
-	opacity: 0.75;
+p.error {
+	color: red;
+}
+
+.inactive {
+	display: none;
 }
 
 .blinking {

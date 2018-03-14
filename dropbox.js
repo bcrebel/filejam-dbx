@@ -103,7 +103,6 @@ let upload = (body, files) => {
 								})
 
 								write.feed();
-								// console.log(util.inspect(feed, { showHidden: true, depth: null }))
 							}
 						})
 						.catch((error) => {
@@ -129,8 +128,8 @@ let upload = (body, files) => {
 
   let write = {
 		feed: function() {
-			if(fs.existsSync("feed.json")) {
-				fs.readFile("feed.json", (error, data) => {
+			if(fs.existsSync("public/feed.json")) {
+				fs.readFile("public/feed.json", (error, data) => {
 					if(error) reject(error);
 
 					let decoder = new StringDecoder('utf8');
@@ -150,7 +149,7 @@ let upload = (body, files) => {
 		},
 
 		file: function(data) {
-			fs.writeFileSync("feed.json", data, (error) => {
+			fs.writeFileSync("public/feed.json", data, (error) => {
 				if(error) throw error;
 				console.log("Feed has been saved");
 			})
@@ -183,8 +182,8 @@ let upload = (body, files) => {
 
 let check = () => {
 
-	if(fs.existsSync("feed.json")) {
-		return fs.statSync('feed.json')
+	if(fs.existsSync("public/feed.json")) {
+		return fs.statSync('public/feed.json')
 	} else {
 		return false;
 	}
@@ -200,6 +199,5 @@ let uploaded = () => {
 
 	return { brand, project, slides }
 }
-
 
 module.exports = { upload, populate, check, uploaded }

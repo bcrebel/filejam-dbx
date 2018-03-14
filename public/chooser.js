@@ -8,9 +8,15 @@ videoOptions = {
 		videoList.empty();
 
 		files.forEach((file) => {
+						// strip off the existing query parameters
+			var baseThumbnail = file.thumbnailLink.split('?')[0];
+			 
+			// add "?mode=crop&bounding_box=800"
+			var cropped = baseThumbnail + '?' + $.param({ mode: 'fit', bounding_box: 256 });
+
 			videoList
-			.append(`<li><p>${file.name}</p><div style="background-image: url('${file.thumbnailLink}'); 
-				background-size: contain; background-color: black; width: 42px; height: 75px;"></div></li>`);
+			.append(`<li><p>${file.name}</p><div style="background-image: url('${cropped}'); 
+				background-size: cover; width: 128px; height: 128px;"></div></li>`);
 			
 			videos = files;
 
@@ -34,7 +40,7 @@ coverOptions = {
 		files.forEach((file) => {
 			coverList
 			.append(`<li><p>${file.name}</p><div style="background-image: url('${file.link}');
-				background-size: contain; width: 87px; height: 116px;"></div></li>`);  
+				background-size: cover; width: 128px; height: 128px;"></div></li>`);  
 
 			covers = files
 
@@ -48,16 +54,14 @@ coverOptions = {
 	folderselect: false
 };
 
-file = {
-	name: "filename.txt",
-	link: "https://...",
-	thumbnailLink: "https://...?bounding_box=75&mode=fit"
-};
+// file = {
+// 	name: "filename.txt",
+// 	link: "https://...",
+// 	thumbnailLink: "https://...?bounding_box=256&mode=fit_one_and_overflow"
+// };
 
 var coverButton = Dropbox.createChooseButton(coverOptions);
 document.getElementById("cover").appendChild(coverButton);
-// $(coverButton).addClass("disabled")
 
 var videoButton = Dropbox.createChooseButton(videoOptions);
 document.getElementById("videos").appendChild(videoButton);
-// $(videoButton).addClass("disabled")

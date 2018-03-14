@@ -11,22 +11,22 @@ html
 		header
 			h1 AMP Story Feed Generator
 		main
-			div.form
-				p Brand Name
-				select#brand(onchange="validation.hasAll()" name="brands")
-					option(value='' selected='' hidden='') Select Brand
-					each brand in brands
-						option(value=brand) #{brand}
-				br
-				label Project Name 
-				input#projects(oninput="validation.hasAll()" placeholder="Wonder Woman's Gal Gadot")
-			label Select Cover Card
+			h3 1) Brand Name
+			select#brand(name="brands")
+				option(value='' selected='' hidden='') Select Brand
+				each brand in brands
+					option(value=brand) #{brand}
+			br
+			h3 2) Project Name 
+			input#projects(placeholder="Wonder Woman's Gal Gadot")
+			h3 3) Select Cover Card
 			div#cover
 			ul#cover-list
-			label Select Videos
+			h3 4) Select Videos
 			div#videos
 			ul#video-list
 			button(disabled onClick="process()") Add to Feed
+			p.error.inactive You must complete all fields
 			ol#frame
 			#thumbs
 		footer

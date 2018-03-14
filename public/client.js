@@ -117,7 +117,6 @@ let sendPosters = {
 			start++;
 			$.get( "/session",  { "time": startTime }, (data) => {
 				console.log(data)
-
 				if(data === "feed updated") {
 					location.href = "success";
 					clearInterval(feedInt)
@@ -131,11 +130,6 @@ let sendPosters = {
 
 				$("#overlay").append("<div class='error-buttons'><button id='cancel'>cancel</button></div>")
 
-				$( "#back" ).click(function() {
-				  $("#overlay").remove()
-				  process()
-				});
-
 				$("#cancel").click(function() {
 					location.reload()
 				});
@@ -145,8 +139,14 @@ let sendPosters = {
 
 			}
 		}
-
 	}
+
+	// getFeed: function() {
+	// 	$.getJSON("feed.json", (data) => {
+	// 		var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+	// 		FileSaver.saveAs(blob, "feed.json");				
+	// 	})
+	// }
 }
 
 let validation = {
@@ -155,16 +155,20 @@ let validation = {
 		element.removeAttr('disabled')
 	},
  	
- // 	toggleDisabledClass: function(element) {
-	// 	element.removeClass('disabled')
-	// },
+ 	addInactiveClass: function(element) {
+		element.addClass('inactive')
+	},
+
+	removeInactiveClass: function(element) {
+		element.removeClass('inactive')
+	},
 
 	hasBrand: function(brand) {
-		return brand.val() != undefined ? true : false;
+		return brand.val() != "" ? true : false;
 	},
 
 	hasProject: function(project) {
-		return project.val() != undefined ?  true : false;
+		return project.val() != "" ?  true : false;
 	},
 
 	hasAll: function() {
@@ -176,8 +180,7 @@ let validation = {
 
 function process() {
 	if(validation.hasAll() && covers != undefined && videos != undefined) {
-		console.log(covers)
-		console.log(videos)
+		validation.addInactiveClass($("p.error"));
 		$("body").append("<div id='overlay'><p class='blinking'>Processing...</p></div>")
 		sendPosters.checkStatus();
 
@@ -192,7 +195,7 @@ function process() {
 		})
 
 		let posters = videos.map((video) => { 
-		 	return createPosters.getVideoImage(video.link, 0)
+			return createPosters.getVideoImage(video.link, 0)
 		})
 
 		Promise.all(posters)
@@ -214,5 +217,15 @@ function process() {
 		.catch((error) => {
 			console.log(error)
 		})
+	} else {
+		validation.removeInactiveClass($("p.error"));
 	}
+}
+
+$("#brand").change(() => {
+	validation.hasAll();
+})
+
+$("#projects").oninput = () => {
+	validation.hasAll()
 }

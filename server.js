@@ -3,9 +3,11 @@
 
 // init project
 require('dotenv').load();
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const path = require('path');
+
 let { upload, populate, check, uploaded }  = require('./dropbox.js')
 
 app.set('view engine', 'pug')
