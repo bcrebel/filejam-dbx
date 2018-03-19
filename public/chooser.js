@@ -1,26 +1,27 @@
 let videos, covers;
+let assetList = $("#asset-list");
 
 videoOptions = {
 
 // Required. Called when a user selects an item in the Chooser.
 	success: function(files) {
-		let videoList = $("#video-list");
-		videoList.empty();
+		$(".eight.columns").css({"border": "0"});
+		$(".video-item").remove();
 
-		files.forEach((file) => {
-						// strip off the existing query parameters
+		files.forEach((file, idx) => {
+			// strip off the existing query parameters
 			var baseThumbnail = file.thumbnailLink.split('?')[0];
 			 
 			// add "?mode=crop&bounding_box=800"
 			var cropped = baseThumbnail + '?' + $.param({ mode: 'fit', bounding_box: 256 });
 
-			videoList
-			.append(`<li><p>${file.name}</p><div style="background-image: url('${cropped}'); 
-				background-size: cover; width: 128px; height: 128px;"></div></li>`);
+			assetList
+			.append(`<li class="video-item"><p class='label'>Video #${idx + 1}</p><p>${file.name}</p><div style="background-image: url('${cropped}'); 
+				background-size: cover; width: 37.5px; height: 66.6px;"></div></li>`);
 			
 			videos = files;
 
-			if(validation.hasAll() && covers != undefined) validation.toggleDisabledAttr($("button"));
+			if(validation.hasMeta() && covers != undefined) validation.toggleDisabledAttr($("button"));
 		});
 	},
 
@@ -32,20 +33,18 @@ videoOptions = {
 
 coverOptions = {
 
-// Required. Called when a user selects an item in the Chooser.
 	success: function(files) {
-		let coverList = $("#cover-list")
-		coverList.empty()
+		$(".eight.columns").css({"border": "0"});
+		$(".cover-item").remove();
 
 		files.forEach((file) => {
-			coverList
-			.append(`<li><p>${file.name}</p><div style="background-image: url('${file.link}');
-				background-size: cover; width: 128px; height: 128px;"></div></li>`);  
+			assetList
+			.prepend(`<li class="cover-item"><p class='label'>Cover Card</p><p>${file.name}</p><div style="background-image: url('${file.link}');
+				background-size: cover; width: 58px; height: 77.2px;"></div></li>`);  
 
 			covers = files
 
-			if(validation.hasAll() && videos != undefined) validation.toggleDisabledAttr($("button"));
-
+			if(validation.hasMeta() && videos != undefined) validation.toggleDisabledAttr($("button"));
 		});
 	},
 	linkType: "direct",
@@ -54,11 +53,6 @@ coverOptions = {
 	folderselect: false
 };
 
-// file = {
-// 	name: "filename.txt",
-// 	link: "https://...",
-// 	thumbnailLink: "https://...?bounding_box=256&mode=fit_one_and_overflow"
-// };
 
 var coverButton = Dropbox.createChooseButton(coverOptions);
 document.getElementById("cover").appendChild(coverButton);

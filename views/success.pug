@@ -6,14 +6,21 @@ html
 		meta(charset="utf-8")
 		meta(http-equiv="X-UA-Compatible" content="IE=edge")
 		meta(name="viewport" content="width=device-width, initial-scale=1")
+		link(rel="stylesheet" href="/normalize.css")
+		link(rel="stylesheet" href="/skeleton.css")
 		link(rel="stylesheet" href="/style.css")
+		link(rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,700")
 		body
-			header
-			h1 All Done!
-			h2 #{files.brand}: #{files.project}
-			ul
-				each file in files.slides
+			div.container
+				header
+				h2 Added to Feed: #{files.brand} - #{files.project}
+				ul.success
+					each file in files.slides
+						li
+							p= file
 					li
-						p= file
-			a(href="/")
-				button Add Another
+						p #{files.cover_card}
+				a(href="/")
+					button Add Another
+				a(href="/feed.json")
+					button.feed View Feed

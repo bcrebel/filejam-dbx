@@ -6,31 +6,39 @@ html
 		meta(charset="utf-8")
 		meta(http-equiv="X-UA-Compatible" content="IE=edge")
 		meta(name="viewport" content="width=device-width, initial-scale=1")
+		link(rel="stylesheet" href="/normalize.css")
+		link(rel="stylesheet" href="/skeleton.css")
 		link(rel="stylesheet" href="/style.css")
+		link(rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,700")
 	body
-		header
-			h1 AMP Story Feed Generator
-		main
-			h3 1) Brand Name
-			select#brand(name="brands")
-				option(value='' selected='' hidden='') Select Brand
-				each brand in brands
-					option(value=brand) #{brand}
-			br
-			h3 2) Project Name 
-			input#projects(placeholder="Wonder Woman's Gal Gadot")
-			h3 3) Select Cover Card
-			div#cover
-			ul#cover-list
-			h3 4) Select Videos
-			div#videos
-			ul#video-list
-			button(disabled onClick="process()") Add to Feed
-			p.error.inactive You must complete all fields
-			ol#frame
-			#thumbs
-		footer
+		div.container
+			header
+			main
+				div.row
+					div.four.columns.form
+						h3 Brand Name
+						select#brand(name="brands")
+							option(value='' selected='' hidden='') Select Brand
+								each brand in brands
+									option(value=brand) #{brand}
+						br
+						h3 Project Name 
+						div#project-container
+							input#projects(placeholder="Ex: Wonder Woman's Gal Gadot")
+						h3 Cover Card
+						div#cover
+						h3 Videos
+						div#videos
+						button(disabled onClick="process()") Upload
+						p.error.inactive You must complete all fields
+						ol#frame
+						#thumbs
+					div.eight.columns
+						ul#asset-list
 		script(src="https://code.jquery.com/jquery-2.2.1.min.js"  integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00=" crossorigin="anonymous")
+		script(type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+  crossorigin="anonymous")
 		script(type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="e4gpfs0pj8z43oz")
 		script(src="chooser.js")
 		script(src="client.js")

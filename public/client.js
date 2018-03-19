@@ -126,7 +126,7 @@ let sendPosters = {
 			if(start === limit) {
 				console.log('here')
 				$("#overlay p").remove()
-				$("#overlay").append("<p class='sorry'>Something went wrong</p>")
+				$("#overlay").append("<p class='sorry'>Sorry, something went wrong!</p>")
 
 				$("#overlay").append("<div class='error-buttons'><button id='cancel'>cancel</button></div>")
 
@@ -140,13 +140,6 @@ let sendPosters = {
 			}
 		}
 	}
-
-	// getFeed: function() {
-	// 	$.getJSON("feed.json", (data) => {
-	// 		var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
-	// 		FileSaver.saveAs(blob, "feed.json");				
-	// 	})
-	// }
 }
 
 let validation = {
@@ -171,15 +164,19 @@ let validation = {
 		return project.val() != "" ?  true : false;
 	},
 
+	hasMeta: function() {
+		return (validation.hasBrand($("#brand")) && validation.hasProject($("#projects"))) ? true : false;
+	},
+
 	hasAll: function() {
-		return validation.hasBrand($("#brand")) && validation.hasProject($("#projects")) ? true : false;
+		if (validation.hasMeta() && videos != undefined && covers != undefined) validation.toggleDisabledAttr($("button"));
 	}
 }
 
 
 
 function process() {
-	if(validation.hasAll() && covers != undefined && videos != undefined) {
+	if(validation.hasMeta() && covers != undefined && videos != undefined) {
 		validation.addInactiveClass($("p.error"));
 		$("body").append("<div id='overlay'><p class='blinking'>Processing...</p></div>")
 		sendPosters.checkStatus();
@@ -222,10 +219,24 @@ function process() {
 	}
 }
 
-$("#brand").change(() => {
-	validation.hasAll();
-})
+$("#brand").change(() => { validation.hasAll() });
 
-$("#projects").oninput = () => {
-	validation.hasAll()
-}
+$("#projects").change(() => { validation.hasAll() });
+
+$( function() {
+	$.getJSON("feed.json", function(data) {
+		let empty = [];
+
+		Object.keys(data).forEach((brand) => {
+
+			Object.keys(data[brand]).forEach((project) => {
+				empty.push(project)
+			});
+		});
+
+		$( "#projects" ).autocomplete({
+			appendTo: $("#project-container"),
+			source: empty
+		});
+	});
+});

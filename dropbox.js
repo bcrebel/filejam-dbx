@@ -9,7 +9,7 @@ const StringDecoder = require('string_decoder').StringDecoder;
 const byKey = require('natural-sort-by-key');
 
 let pathToApp = '/Apps/filejam/';
-let brands = ["Cosmopolitan", "Elle", "Esquire", "Harpers Bazaar"];
+let brands = ["Cosmopolitan", "Elle", "Esquire", "Harper's Bazaar"];
 let _ = require('lodash');
 
 let dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
@@ -18,19 +18,19 @@ let populate = () => {
   return brands
 }
  
-let feed, brand, project;
+let feed, brand, project, cover_card;
 
 let upload = (body, files) => {
-	console.log(files)
 	let uploads = [];
 	let links = [];
 	feed = {};
 	brand = body.brand;
 	project = body.project;
+	cover_card = body.coverCard;
 
   feed[brand] = {};
   feed[brand][project] = { "slides": [] };
-  feed[brand][project]["cover_card"] = body.coverCard;
+  feed[brand][project]["cover_card"] = cover_card
 
   if(!_.isArray(body.link)) { 
 
@@ -196,8 +196,10 @@ let uploaded = () => {
 		return _.keys(slide.video)[0]
 	})
 
+	cover_card = decodeURIComponent(cover_card.slice(cover_card.lastIndexOf("/") + 1));
 
-	return { brand, project, slides }
+
+	return { brand, project, slides, cover_card }
 }
 
 module.exports = { upload, populate, check, uploaded }
